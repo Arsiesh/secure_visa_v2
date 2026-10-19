@@ -1,6 +1,8 @@
 // New Zealand and Canada page copy, structured from pages/new-zealand-services.md and pages/canada-services.md.
 // Client letters for each destination live in testimonials.ts (longTestimonials, filtered by `destination`).
 
+import { funnel } from './site'
+
 export type Cta = { label: string; href: string }
 
 export type Destination = {
@@ -13,12 +15,10 @@ export type Destination = {
     title: string
     subtitle: string
     lead: string
-    background: string
-    mobileImage?: string
     ctas: Cta[]
   }
   intro: string[]
-  promise: { heading: string; lead: string; items: string[]; images: { src: string; alt: string }[] }
+  promise: { heading: string; lead: string; items: string[] }
   remain: { heading: string; body: string[]; cta: Cta }
   presentation: {
     lead: string
@@ -27,8 +27,6 @@ export type Destination = {
     bullets: string[]
     closing: string[]
     cta: Cta
-    image: { src: string; alt: string }
-    sideImage: { src: string; alt: string }
   }
   finalCta: Cta
 }
@@ -42,10 +40,8 @@ export const newZealand: Destination = {
     title: 'Emigrate to New Zealand',
     subtitle: 'even if you don’t have a job offer or are not a highly skilled professional!',
     lead: 'Keep scrolling if you’d like to learn how we can help you emigrate and gain permanent residency in New Zealand through our simple, proven process.',
-    background: 'nz-section-1-background.webp',
-    mobileImage: 'nz-mobile-section-image.webp',
     ctas: [
-      { label: 'Register for our free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
+      funnel.nzWebinar,
       { label: 'Watch the free video presentation', href: 'https://study.securevisa.com/now/' },
     ],
   },
@@ -66,10 +62,6 @@ export const newZealand: Destination = {
       'Creating your application and submitting it',
       'And helping you settle into your new home and adjusting to the culture',
     ],
-    images: [
-      { src: 'canada-image-1.webp', alt: '' },
-      { src: 'canada-image-2.webp', alt: '' },
-    ],
   },
   remain: {
     heading: 'We remain by your side at all times!',
@@ -77,7 +69,7 @@ export const newZealand: Destination = {
       'Remember, we’ve been through this process. We know how exciting it is but also how overwhelming it can get (not to mention the fear of being so far away from the rest of your family).',
       'When you work with us, you become part of our family. We then work with your family to help achieve your dream life.',
     ],
-    cta: { label: 'Register for our free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
+    cta: funnel.nzWebinar,
   },
   presentation: {
     lead: 'Attend our',
@@ -97,10 +89,8 @@ export const newZealand: Destination = {
       'We’ve helped dozens of families like yours and hundreds of people in your shoes build a new life in an exciting country with endless opportunities. If you would like to learn how we can help or more about the people we have helped, attend our webinar now.',
     ],
     cta: { label: 'Watch the free video presentation', href: 'https://study.securevisa.com/now/' },
-    image: { src: 'canada-image-3.webp', alt: '' },
-    sideImage: { src: 'canada-image-4.webp', alt: '' },
   },
-  finalCta: { label: 'Register for our free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
+  finalCta: funnel.nzWebinar,
 }
 
 export const canada: Destination = {
@@ -112,8 +102,6 @@ export const canada: Destination = {
     title: 'Emigrate to Canada',
     subtitle: 'even if you don’t have a job offer or are not a highly skilled professional!',
     lead: 'Keep scrolling if you’d like to learn how we can help you emigrate and gain permanent residency in Canada through our simple, proven process.',
-    background: 'canada-banner.webp',
-    mobileImage: 'canada-image.webp',
     ctas: [{ label: 'Watch our free 60-min video', href: 'https://study.securevisa.com/CANADA-PR/' }],
   },
   intro: [
@@ -132,10 +120,6 @@ export const canada: Destination = {
       'Preparing and planning your application',
       'Creating your application and submitting it',
       'Helping you settle into your new home and adjusting to the culture',
-    ],
-    images: [
-      { src: 'canada-image-1.webp', alt: '' },
-      { src: 'canada-image-2.webp', alt: '' },
     ],
   },
   remain: {
@@ -164,8 +148,6 @@ export const canada: Destination = {
       'We’ve helped dozens of families like yours and hundreds of people in your shoes build a new life in an exciting country with endless opportunities. If you would like to learn how we can help or more about the people we have helped already, attend our webinar now.',
     ],
     cta: { label: 'Attend our free webinar now', href: 'https://study.securevisa.com/now/' },
-    image: { src: 'canada-image-3.webp', alt: '' },
-    sideImage: { src: 'canada-image-4.webp', alt: '' },
   },
   finalCta: { label: 'Watch our free 60-min video', href: 'https://study.securevisa.com/CANADA-PR/' },
 }
@@ -174,6 +156,6 @@ export const destinations = { nz: newZealand, canada } as const
 
 /** Service cards used on the home page to link to each destination. */
 export const serviceCards = [
-  { slug: 'nz', label: 'Student visa in New Zealand', href: '/new-zealand-services/', image: 'service-card-new-zealand.webp' },
-  { slug: 'canada', label: 'Student visa in Canada', href: '/canada-services/', image: 'service-card-canada.webp' },
+  { slug: 'nz', label: 'Student visa in New Zealand', href: '/new-zealand-services/' },
+  { slug: 'canada', label: 'Student visa in Canada', href: '/canada-services/' },
 ] as const

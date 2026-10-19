@@ -10,10 +10,10 @@
   width: 2.375rem;
   aspect-ratio: 100 / 64;
   pointer-events: none;
-  color: var(--color-signal, #f6c445);
+  color: var(--color-signal);
   opacity: 0.96;
   transform: rotate(var(--stamp-rot, 0deg));
-  filter: url(#sv-ink) drop-shadow(0 0 1px rgba(15, 58, 39, 0.8));
+  filter: url(#sv-ink) drop-shadow(0 0 1px color-mix(in oklab, var(--color-kauri) 80%, transparent));
 }
 .sv-name:not([data-named]) .sv-stamp { left: 0; bottom: 0; }
 @media (min-width: 640px) {

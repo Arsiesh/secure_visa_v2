@@ -11,6 +11,24 @@ export type InquiryData = {
 /** 'sent': delivered to our team. 'handed-off': only passed to the visitor's email app, who must still tap Send. */
 export type SubmitResult = 'sent' | 'handed-off'
 
+export type FieldKey = 'name' | 'email' | 'phone'
+type Errors = Partial<Record<FieldKey, string>>
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const PHONE = /^\+?[0-9\s().-]{7,}$/
+
+/** Inline error messages by field. An empty object means the form can be sent. */
+export function validate(v: InquiryData): Errors {
+  const errors: Errors = {}
+  if (!v.name.trim()) errors.name = 'Enter your name, so we know who to reply to'
+  if (!v.email.trim()) errors.email = 'Enter your email address, like name@example.com'
+  else if (!EMAIL.test(v.email.trim())) errors.email = 'Check your email address. It should look like name@example.com'
+  if (v.phone.trim() && !PHONE.test(v.phone.trim())) {
+    errors.phone = 'Check your phone number. Include your country code, for example +63 968 888 0805'
+  }
+  return errors
+}
+
 export function composeInquiry(data: InquiryData) {
   const inquiry = data.inquiry || 'Other inquiries'
   const subject = `Website inquiry: ${inquiry}`

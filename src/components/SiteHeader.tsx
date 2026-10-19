@@ -22,14 +22,14 @@ export function SiteHeader() {
         scrolled ? 'border-line-dark bg-kauri/90 backdrop-blur-xl' : 'border-transparent bg-kauri',
       )}
     >
-      <Container size="wide" className="flex h-16 items-center justify-between gap-6 lg:h-[4.5rem]">
+      <Container size="wide" className="flex h-16 items-center justify-between gap-4 lg:h-[4.5rem] xl:gap-6">
         <Link to="/" viewTransition className="inline-flex min-h-11 shrink-0 items-center">
-          <Img name={brand.logoHeader} alt="Secure Visa, home" className="h-8 w-auto lg:h-9" />
+          <Img name={brand.logoHeader} alt="Secure Visa, home" className="h-8 w-auto xl:h-9" />
         </Link>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-2 lg:flex xl:gap-4">
           <DesktopNav />
-          <ButtonLink href={headerCta.href} variant="onDark" className="min-h-11 px-5 py-2">
+          <ButtonLink href={headerCta.href} variant="onDark" className="whitespace-nowrap">
             {headerCta.label}
           </ButtonLink>
         </div>

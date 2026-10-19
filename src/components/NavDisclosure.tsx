@@ -23,10 +23,10 @@ export function NavDisclosure({ group, pathname, open, onToggle }: NavDisclosure
       <button
         type="button"
         aria-expanded={open}
-        aria-controls={panelId}
+        aria-controls={open ? panelId : undefined}
         onClick={onToggle}
         className={clsx(
-          'inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-base font-medium transition-colors hover:bg-white/10 hover:text-white',
+          'inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-base xl:px-4 font-medium transition-colors hover:bg-white/10 hover:text-white',
           hasCurrent || open ? 'text-white' : 'text-white/80',
           hasCurrent && 'underline decoration-signal decoration-2 underline-offset-[10px]',
         )}

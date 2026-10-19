@@ -31,6 +31,9 @@ window.addEventListener('vite:preloadError', (event) => {
   window.location.reload()
 })
 
+// index.html's static description is for link unfurlers that skip JS; React 19 hoists each page's own, so drop it before render.
+document.querySelector('meta[name="description"]')?.remove()
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

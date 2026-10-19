@@ -48,7 +48,7 @@ export function MobileMenu() {
       <button
         type="button"
         aria-expanded={open}
-        aria-controls="mobile-menu"
+        aria-controls={open ? 'mobile-menu' : undefined}
         onClick={() => setOpenedOn(pathname)}
         className="-mr-2 inline-flex size-12 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
       >
@@ -73,7 +73,7 @@ export function MobileMenu() {
             className="on-dark fixed inset-0 z-[70] flex flex-col overflow-y-auto overscroll-contain bg-kauri"
           >
             <div className="mx-auto flex h-16 w-full max-w-7xl shrink-0 items-center justify-between px-5 sm:px-8">
-              <Link to="/" onClick={close} className="inline-flex min-h-11 items-center">
+              <Link to="/" viewTransition onClick={close} className="inline-flex min-h-11 items-center">
                 <Img name={brand.logoHeader} alt="Secure Visa, home" className="h-8 w-auto" />
               </Link>
               <button
@@ -96,7 +96,7 @@ export function MobileMenu() {
                       <ul className="flex flex-col gap-1 border-l-2 border-line-dark/70 ml-4">
                         {item.children.map((child) => (
                           <li key={child.href}>
-                            <NavLink to={child.href} end onClick={close} className={linkClass}>
+                            <NavLink to={child.href} end viewTransition onClick={close} className={linkClass}>
                               {child.label}
                             </NavLink>
                           </li>
@@ -105,7 +105,7 @@ export function MobileMenu() {
                     </li>
                   ) : (
                     <li key={item.label}>
-                      <NavLink to={item.href} end onClick={close} className={linkClass}>
+                      <NavLink to={item.href} end viewTransition onClick={close} className={linkClass}>
                         {item.label}
                       </NavLink>
                     </li>

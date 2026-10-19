@@ -33,7 +33,7 @@ export function PodcastSection() {
                     {formatEpisodeDate(e.date)}
                   </time>
                 </p>
-                <p className="mt-1 text-[1.125rem] font-semibold leading-snug">{e.title}</p>
+                <p className="mt-1 text-[1.125rem] font-semibold leading-snug [overflow-wrap:anywhere]">{e.title}</p>
                 <ListenProgress episode={e} className="mt-2 block" />
               </div>
               <EpisodePlayButton episode={e} variant="icon" className="col-start-2 mt-3 justify-self-start sm:col-start-3 sm:row-start-1 sm:mt-0 sm:mr-1 sm:justify-self-auto" />

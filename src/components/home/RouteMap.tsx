@@ -34,7 +34,7 @@ export function RouteMap({ dest, fly }: Props) {
         <svg viewBox={`0 0 ${W} ${H}`} className="block size-full" fill="none">
           <path
             d={LAND_DOTS}
-            stroke="#c2d0c7"
+            stroke="var(--color-line)"
             strokeWidth="3.6"
             strokeLinecap="round"
             strokeDasharray={`0 ${dotStep}`}

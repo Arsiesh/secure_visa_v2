@@ -39,7 +39,7 @@ function MiniStamp({ id }: { id: string }) {
       className="sv-stamp font-board"
       style={{ '--stamp-rot': `${rot}deg` } as CSSProperties}
     >
-      <rect x="1.5" y="1.5" width="97" height="61" rx="9" fill="#0f3a27" fillOpacity="0.94" stroke="currentColor" strokeWidth="3.4" />
+      <rect x="1.5" y="1.5" width="97" height="61" rx="9" fill="var(--color-kauri)" fillOpacity="0.94" stroke="currentColor" strokeWidth="3.4" />
       <rect x="8" y="8" width="84" height="48" rx="5" fill="none" stroke="currentColor" strokeWidth="1.6" />
       <text x="50" y="26" textAnchor="middle" fontSize="16" fill="currentColor" letterSpacing="2.5">ARRIVED</text>
       <text x="50" y="49" textAnchor="middle" fontSize="25" fontWeight="800" fill="currentColor" letterSpacing="3">AKL</text>

@@ -106,7 +106,7 @@ The original site hides its nav behind a hamburger, even on desktop. **Fix that.
 External funnel CTAs stay as real links that open in the same tab:
 - `https://study.securevisa.com/nz` ("Watch the free 40-min video")
 - `https://study.securevisa.com/now/` ("Watch the free 60-min video")
-- `https://study.securevisa.com/nz-webinar/` ("Register for the free NZ webinar")
+- `https://migrate.securevisa.com/nz-webinar` ("Register for the free NZ webinar"; the old `study.securevisa.com/nz-webinar/` link redirects here)
 
 ## Home page wireframe (mobile stacks in this order)
 

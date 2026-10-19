@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useReducedMotion } from 'motion/react'
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import clsx from 'clsx'
 import { Img } from './Img'
 
 export type RailItem = {
@@ -18,18 +17,15 @@ type TestimonialRailProps = {
   items: readonly RailItem[]
   /** Accessible name for the carousel, for example "Client testimonials". */
   label: string
-  /** Visible heading. Rendered as an h2 with this id-linked label. */
+  /** Visible heading, rendered as an h2. */
   heading?: string
-  tone?: 'light' | 'dark'
   className?: string
 }
 
 /** Horizontal scroll-snap rail. No autoplay: it only moves on swipe, wheel, arrow keys, or the prev/next buttons. */
-export function TestimonialRail({ items, label, heading, tone = 'light', className }: TestimonialRailProps) {
-  const dark = tone === 'dark'
+export function TestimonialRail({ items, label, heading, className }: TestimonialRailProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
-  const headingId = useId()
   const [edge, setEdge] = useState({ start: true, end: false })
 
   const measure = useCallback(() => {
@@ -78,25 +74,14 @@ export function TestimonialRail({ items, label, heading, tone = 'light', classNa
     }
   }
 
-  const navButton = clsx(
-    'inline-flex size-12 items-center justify-center rounded-full border-2 transition-colors aria-disabled:cursor-not-allowed aria-disabled:opacity-35',
-    dark
-      ? 'border-white/60 text-white hover:bg-white/10 aria-disabled:hover:bg-transparent'
-      : 'border-fern text-fern hover:bg-fern hover:text-white aria-disabled:hover:bg-transparent aria-disabled:hover:text-fern',
-  )
+  const navButton =
+    'inline-flex size-12 items-center justify-center rounded-full border-2 border-fern text-fern transition-colors hover:bg-fern hover:text-white aria-disabled:cursor-not-allowed aria-disabled:opacity-35 aria-disabled:hover:bg-transparent aria-disabled:hover:text-fern'
 
   return (
-    <div
-      role="region"
-      aria-roledescription="carousel"
-      aria-label={label}
-      className={clsx(dark && 'on-dark', className)}
-    >
+    <div role="region" aria-roledescription="carousel" aria-label={label} className={className}>
       <div className="mb-6 flex items-end justify-between gap-6">
         {heading ? (
-          <h2 id={headingId} className={clsx('font-display text-[clamp(1.75rem,3.4vw,2.75rem)]', dark ? 'text-white' : 'text-ink')}>
-            {heading}
-          </h2>
+          <h2 className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] text-ink">{heading}</h2>
         ) : (
           <span />
         )}
@@ -127,13 +112,10 @@ export function TestimonialRail({ items, label, heading, tone = 'light', classNa
             role="group"
             aria-roledescription="slide"
             aria-label={`${index + 1} of ${items.length}`}
-            className={clsx(
-              'flex w-[min(84vw,23rem)] shrink-0 snap-start flex-col justify-between gap-6 rounded-card p-6 sm:p-7',
-              dark ? 'bg-kauri-2 text-white' : 'bg-mist text-ink',
-            )}
+            className="flex w-[min(84vw,23rem)] shrink-0 snap-start flex-col justify-between gap-6 rounded-card bg-mist p-6 text-ink sm:p-7"
           >
             <blockquote className="flex flex-col gap-4">
-              <Quote aria-hidden="true" className={clsx('size-7', dark ? 'text-kawakawa' : 'text-fern')} />
+              <Quote aria-hidden="true" className="size-7 text-fern" />
               <p className="text-[1.0625rem] leading-relaxed">{item.quote}</p>
             </blockquote>
             <figcaption className="flex items-center gap-3">
@@ -143,9 +125,7 @@ export function TestimonialRail({ items, label, heading, tone = 'light', classNa
               <span className="leading-snug">
                 <span className="block font-semibold">{item.name}</span>
                 {item.subtitle ? (
-                  <span className={clsx('block text-[0.9375rem]', dark ? 'text-white/75' : 'text-ink-muted')}>
-                    {item.subtitle}
-                  </span>
+                  <span className="block text-[0.9375rem] text-ink-muted">{item.subtitle}</span>
                 ) : null}
               </span>
             </figcaption>

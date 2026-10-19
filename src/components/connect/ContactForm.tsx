@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type Dispatch, type FormEvent, type SetStateAction } from 'react'
 import { Check, Copy, Mail, Phone } from 'lucide-react'
 import clsx from 'clsx'
 import { CircleAlert } from 'lucide-react'
 import { inquiries } from '../../content/connect-extra'
 import { contact } from '../../content/site'
-import { composeInquiry, openMailto, submitInquiry, type SubmitResult } from './submitInquiry'
+import { composeInquiry, openMailto, submitInquiry, validate, type FieldKey, type SubmitResult } from './submitInquiry'
 
 export type FormValues = {
   name: string
@@ -14,36 +14,25 @@ export type FormValues = {
   message: string
 }
 
-type FieldKey = 'name' | 'email' | 'phone'
-type Errors = Partial<Record<FieldKey, string>>
-
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const PHONE = /^\+?[0-9\s().-]{7,}$/
-
-function validate(v: FormValues): Errors {
-  const errors: Errors = {}
-  if (!v.name.trim()) errors.name = 'Enter your name, so we know who to reply to'
-  if (!v.email.trim()) errors.email = 'Enter your email address, like name@example.com'
-  else if (!EMAIL.test(v.email.trim())) errors.email = 'Check your email address. It should look like name@example.com'
-  if (v.phone.trim() && !PHONE.test(v.phone.trim())) {
-    errors.phone = 'Check your phone number. Include your country code, for example +63 968 888 0805'
-  }
-  return errors
-}
-
 const inputClass =
-  'block min-h-12 w-full rounded-input border-2 border-line-strong bg-white px-4 py-2.5 text-ink hover:border-fern placeholder:text-ink-muted/70 aria-[invalid=true]:border-danger'
+  'block min-h-12 w-full rounded-input border-2 border-line-strong bg-white px-4 py-2.5 text-ink hover:border-fern placeholder:text-ink-muted aria-[invalid=true]:border-danger'
 
 const fieldOrder: FieldKey[] = ['name', 'email', 'phone']
 
-/** What the check-in pass needs to know. `valid` comes from this form's own validation. */
-export type FormSnapshot = { values: FormValues; valid: boolean; result: SubmitResult | null }
-
-export function ContactForm({ initial, onChange }: { initial: FormValues; onChange?: (snapshot: FormSnapshot) => void }) {
-  const [values, setValues] = useState<FormValues>(initial)
+/** `values` and `result` live in the parent so the check-in pass can read them in the same render. */
+export function ContactForm({
+  values,
+  setValues,
+  result,
+  setResult,
+}: {
+  values: FormValues
+  setValues: Dispatch<SetStateAction<FormValues>>
+  result: SubmitResult | null
+  setResult: Dispatch<SetStateAction<SubmitResult | null>>
+}) {
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({})
   const [submitted, setSubmitted] = useState(false)
-  const [result, setResult] = useState<SubmitResult | null>(null)
   const [copied, setCopied] = useState('')
   const summaryRef = useRef<HTMLDivElement>(null)
   const confirmRef = useRef<HTMLDivElement>(null)
@@ -53,11 +42,6 @@ export function ContactForm({ initial, onChange }: { initial: FormValues; onChan
   const visible = (key: FieldKey) => (submitted || touched[key] ? errors[key] : undefined)
   const errorKeys = fieldOrder.filter((k) => errors[k])
   const showSummary = submitted && errorKeys.length > 0
-  const valid = errorKeys.length === 0
-
-  useEffect(() => {
-    onChange?.({ values, valid, result })
-  }, [onChange, values, valid, result])
 
   const set = (key: keyof FormValues) => (event: { target: { value: string } }) =>
     setValues((prev) => ({ ...prev, [key]: event.target.value }))

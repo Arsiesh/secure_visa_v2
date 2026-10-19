@@ -360,8 +360,6 @@ export const episodes: PodcastEpisode[] = [
   },
 ]
 
-export const podcastArchiveHref = 'https://www.securevisa.com/podcast/'
-
 export type PodcastPlatform = { name: string; logo: string; href: string }
 
 /** Logos are 217x55 colour JPGs (Apple and Spotify have their own PNG/JPG variants of the same size). */

@@ -179,6 +179,7 @@ export default function PlayerBar() {
 
         <Link
           to="/connect/?intent=assessment"
+          viewTransition
           className={clsx(
             'col-span-full row-start-5 min-h-11 items-center justify-center text-sm text-white/85 underline underline-offset-4 hover:text-white lg:col-span-1 lg:col-start-7 lg:row-start-1 lg:justify-self-end lg:whitespace-nowrap',
             'hidden lg:flex',

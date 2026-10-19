@@ -57,7 +57,9 @@ export function ContactPanel() {
             <li key={s.id}>
               <a
                 href={s.url}
-                aria-label={s.name}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${s.name}, ${s.handle} (opens in a new tab)`}
                 className="grid size-12 place-items-center rounded-full border-2 border-line text-ink transition-colors hover:border-fern hover:text-fern"
               >
                 <SocialIcon id={s.id} className="size-6" />

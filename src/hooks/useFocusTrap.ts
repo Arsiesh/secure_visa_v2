@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from 'react'
+import { useScrollLock } from './useScrollLock'
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
@@ -8,13 +9,12 @@ const FOCUSABLE =
  * and returns focus to whatever was focused before when it deactivates.
  */
 export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean) {
+  useScrollLock(active)
   useEffect(() => {
     const container = ref.current
     if (!active || !container) return
 
     const previouslyFocused = document.activeElement as HTMLElement | null
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
 
     const focusables = () => Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE))
     ;(container.querySelector<HTMLElement>('[data-autofocus]') ?? focusables()[0])?.focus()
@@ -41,7 +41,6 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = previousOverflow
       previouslyFocused?.focus?.()
     }
   }, [ref, active])

@@ -18,7 +18,7 @@ type ButtonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
 }
 
 const base =
-  'inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-6 py-2.5 text-center text-[1.0625rem] font-semibold leading-tight transition-colors duration-200 focus-visible:outline-offset-4'
+  'inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-6 py-2.5 text-center text-[1.0625rem] font-semibold leading-tight transition-[color,background-color,border-color,transform] duration-200 focus-visible:outline-offset-4 active:scale-[0.98] motion-reduce:active:scale-100'
 
 const variants: Record<ButtonVariant, string> = {
   primary: 'bg-fern text-white hover:bg-fern-dark',

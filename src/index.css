@@ -99,11 +99,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-@utility font-body {
-  font-stretch: 100%;
-  font-weight: 400;
-}
-
 @utility text-pretty {
   text-wrap: pretty;
 }

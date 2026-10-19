@@ -17,11 +17,3 @@ export function savePosition(episodeNumber: number, seconds: number): void {
     // Storage unavailable: resuming simply won't work.
   }
 }
-
-export function clearPosition(episodeNumber: number): void {
-  try {
-    localStorage.removeItem(key(episodeNumber))
-  } catch {
-    // Nothing to do.
-  }
-}

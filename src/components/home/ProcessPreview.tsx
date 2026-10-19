@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { processIntro, processSteps } from '../../content/process'
+import { headerCta } from '../../content/site'
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 
@@ -40,10 +41,11 @@ export function ProcessPreview() {
                 <p className="mt-1.5 max-w-[34ch] text-[1rem] text-ink-muted">{SUMMARY[s.step].line}</p>
                 {s.step === 1 ? (
                   <Link
-                    to="/connect/?intent=assessment"
+                    to={headerCta.href}
+                    viewTransition
                     className="mt-1 inline-flex min-h-11 items-center font-semibold text-fern underline underline-offset-4 hover:text-kauri"
                   >
-                    Book your free assessment
+                    {headerCta.label}
                   </Link>
                 ) : null}
               </div>

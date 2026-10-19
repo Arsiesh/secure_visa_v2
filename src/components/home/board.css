@@ -132,7 +132,7 @@
   color: var(--color-kauri);
 }
 .board-row[aria-pressed='true'] .flap-split {
-  background: rgb(15 58 39 / 0.08);
+  background: color-mix(in oklab, var(--color-kauri) 8%, transparent);
 }
 .board-row:not([aria-pressed='true']):hover .flap-half {
   background: color-mix(in oklab, var(--color-kauri-2) 70%, black);
@@ -179,6 +179,13 @@
   top: 50%;
   height: max(100%, 44px);
   transform: translateY(-50%);
+}
+/* Phones: a 26px row would leave overlapping tap zones, so each row button is 44px and the zones stack. */
+@media (width < 40rem) {
+  .board-row:not(.board-row-static) {
+    min-height: 44px;
+    align-content: center;
+  }
 }
 
 /* "Your family: expected". Not a past arrival, so the status cells are outlined, not filled. */

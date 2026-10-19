@@ -1,14 +1,15 @@
 import { Mail, Phone } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 import { CheckInPass } from '../components/connect/CheckInPass'
-import { ContactForm, type FormSnapshot, type FormValues } from '../components/connect/ContactForm'
+import { ContactForm, type FormValues } from '../components/connect/ContactForm'
 import { ContactPanel } from '../components/connect/ContactPanel'
+import { validate, type SubmitResult } from '../components/connect/submitInquiry'
 import { ButtonLink } from '../components/ButtonLink'
 import { Container } from '../components/Container'
 import { CtaBand } from '../components/CtaBand'
 import { inquiries } from '../content/connect-extra'
-import { contact } from '../content/site'
+import { contact, funnel } from '../content/site'
 
 const PARTY_MESSAGE: Record<string, string> = {
   solo: 'I’m planning to move on my own.',
@@ -47,15 +48,16 @@ function isAssessment(params: URLSearchParams) {
 }
 
 function FormAndPass({ initial, assessment }: { initial: FormValues; assessment: boolean }) {
-  const [snap, setSnap] = useState<FormSnapshot>({ values: initial, valid: false, result: null })
-  const onChange = useCallback((next: FormSnapshot) => setSnap(next), [])
+  const [values, setValues] = useState<FormValues>(initial)
+  const [result, setResult] = useState<SubmitResult | null>(null)
+  const valid = Object.keys(validate(values)).length === 0
   const pass = (className?: string) => (
     <CheckInPass
-      name={snap.values.name}
-      inquiry={snap.values.inquiry}
+      name={values.name}
+      inquiry={values.inquiry}
       assessment={assessment}
-      valid={snap.valid}
-      result={snap.result}
+      valid={valid}
+      result={result}
       className={className}
     />
   )
@@ -73,9 +75,9 @@ function FormAndPass({ initial, assessment }: { initial: FormValues; assessment:
             </ButtonLink>
           </div>
         </div>
-        <ContactForm initial={initial} onChange={onChange} />
+        <ContactForm values={values} setValues={setValues} result={result} setResult={setResult} />
         {/* Below lg the pass only appears with the confirmation, so it never pushes the form down. */}
-        {snap.result ? <div className="mt-8 lg:hidden">{pass()}</div> : null}
+        {result ? <div className="mt-8 lg:hidden">{pass()}</div> : null}
       </div>
       <div className="lg:col-span-5">
         <div className="hidden lg:mb-10 lg:block">{pass()}</div>
@@ -129,7 +131,7 @@ export default function ConnectPage() {
         <FormAndPass initial={initialValues(params, nameFromState(state))} assessment={assessment} />
       </section>
 
-      <CtaBand label="Access the free presentation" href="https://migrate.securevisa.com/nz-webinar" />
+      <CtaBand label={funnel.nzWebinar.label} href={funnel.nzWebinar.href} />
     </>
   )
 }

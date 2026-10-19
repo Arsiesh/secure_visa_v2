@@ -110,7 +110,7 @@ export function FindYourRoute() {
   const bookHref = `/connect/?${params.toString()}`
 
   return (
-    <section id="find-your-route" tabIndex={-1} aria-labelledby="route-title" className="bg-mist py-12 outline-none sm:py-14 lg:py-20">
+    <section id="find-your-route" data-cta-zone tabIndex={-1} aria-labelledby="route-title" className="bg-mist py-12 outline-none sm:py-14 lg:py-20">
       <Container className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-y-8 xl:gap-x-16">
         <div className="lg:col-start-1 lg:row-start-1">
           <h2 id="route-title" tabIndex={-1} className="font-display text-[clamp(2rem,4.2vw,3.5rem)] outline-none">
@@ -172,26 +172,6 @@ export function FindYourRoute() {
           </form>
         </div>
 
-        <div data-cta-zone className="flex flex-wrap items-start gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
-          <div className="max-w-[22rem]">
-            <ButtonLink href={bookHref}>Book my free assessment</ButtonLink>
-            <p className="mt-2 text-[0.9375rem] leading-snug text-ink-muted">Free. We don’t charge you a fee just to speak to us.</p>
-          </div>
-          {isNurse ? (
-            <EpisodePlayButton
-              episode={NURSE_EPISODE}
-              label={`Listen: a nurse from the Philippines who became a resident in New Zealand (${NURSE_MINUTES} min)`}
-              activeLabel="Pause the nurse’s story"
-              variant="primary"
-              className="max-w-[24rem] border-2 border-fern bg-transparent! text-left text-fern! hover:bg-fern! hover:text-white!"
-            />
-          ) : (
-            <ButtonLink href={destination.path} variant="secondary">
-              Read about studying in {destination.name}
-            </ButtonLink>
-          )}
-        </div>
-
         <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
           <p className="sr-only" role="status">
             Boarding pass updated: Manila to {to.city}, {partyLabel}
@@ -230,6 +210,26 @@ export function FindYourRoute() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-start gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <div className="max-w-[22rem]">
+            <ButtonLink href={bookHref}>Book my free assessment</ButtonLink>
+            <p className="mt-2 text-[0.9375rem] leading-snug text-ink-muted">Free. We don’t charge you a fee just to speak to us.</p>
+          </div>
+          {isNurse ? (
+            <EpisodePlayButton
+              episode={NURSE_EPISODE}
+              label={`Listen: a nurse from the Philippines who became a resident in New Zealand (${NURSE_MINUTES} min)`}
+              activeLabel="Pause the nurse’s story"
+              variant="primary"
+              className="max-w-[24rem] border-2 border-fern bg-transparent! text-left text-fern! hover:bg-fern! hover:text-white!"
+            />
+          ) : (
+            <ButtonLink href={destination.path} variant="secondary">
+              Read about studying in {destination.name}
+            </ButtonLink>
+          )}
         </div>
       </Container>
     </section>

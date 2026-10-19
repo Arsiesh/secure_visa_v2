@@ -61,7 +61,7 @@ export function ArrivalsWall({ photos, onOpen }: ArrivalsWallProps) {
                   id={photo.id}
                   name={photo.name}
                   pillClassName={clsx(
-                    "px-2.5 py-1 text-xs font-semibold leading-tight sm:text-sm",
+                    "px-2.5 py-1 text-sm font-semibold leading-tight",
                     big && "sm:text-base",
                   )}
                 />

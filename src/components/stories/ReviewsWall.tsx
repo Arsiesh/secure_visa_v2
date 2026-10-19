@@ -35,7 +35,7 @@ export function ReviewsWall({ reviews, onOpen }: ReviewsWallProps) {
               onClick={() => onOpen(index)}
               aria-label={`Enlarge review: ${review.alt}`}
               aria-haspopup="dialog"
-              className="group block w-full overflow-hidden rounded-card bg-white"
+              className="group block w-full overflow-hidden rounded-card bg-white focus-visible:outline-offset-[-4px]"
             >
               <Img
                 name={review.image}

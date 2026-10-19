@@ -12,8 +12,6 @@ type CtaBandProps = {
   label: string
   href: string
   icon?: LucideIcon
-  /** Optional second button, shown as a ghost button. */
-  secondary?: { label: string; href: string }
   /** Defaults to the client's closing copy. */
   heading?: string
   body?: readonly string[]
@@ -29,7 +27,6 @@ export function CtaBand({
   label,
   href,
   icon,
-  secondary,
   heading = closingCta.heading,
   body = closingCta.body,
   extra,
@@ -58,11 +55,6 @@ export function CtaBand({
                 <ButtonLink href={href} variant={variant} icon={icon}>
                   {label}
                 </ButtonLink>
-                {secondary ? (
-                  <ButtonLink href={secondary.href} variant="ghost">
-                    {secondary.label}
-                  </ButtonLink>
-                ) : null}
               </div>
             </div>
             <div className="hidden justify-center sm:flex lg:col-span-4 lg:justify-end">

@@ -27,9 +27,10 @@ export function MobileCtaBar() {
     const io = new IntersectionObserver(([entry]) => setFooterInView(entry.isIntersecting))
     io.observe(footer)
     return () => io.disconnect()
-  }, [pathname])
+  }, [])
 
-  // One observer for every [data-cta-zone]. The DOM swaps on navigation, so re-query when <main>'s children change.
+  // One observer for every [data-cta-zone]. Pages render straight into <main> (no Suspense below it), so a navigation
+  // replaces its direct children: re-query when those change. The footer and <main> persist, so this runs once.
   useEffect(() => {
     const inView = new Set<Element>()
     const watched = new Set<Element>()
@@ -60,22 +61,31 @@ export function MobileCtaBar() {
     scan()
     const main = document.querySelector('main')
     const mo = new MutationObserver(scan)
-    if (main) mo.observe(main, { childList: true, subtree: true })
+    if (main) mo.observe(main, { childList: true })
     return () => {
       mo.disconnect()
       io.disconnect()
     }
-  }, [pathname])
+  }, [])
 
   const onConnect = pathname.replace(/\/+$/, '').endsWith('/connect')
   const visible = pastFold && !footerInView && !zoneInView && !episode && !onConnect
 
+  // Observed rather than measured once: the bar is display:none from lg up, so crossing that breakpoint must drop the spacer.
   useEffect(() => {
+    const el = ref.current
+    if (!visible || !el) return
     const root = document.documentElement
-    const h = ref.current?.offsetHeight ?? 0
-    if (visible && h > 0) root.style.setProperty('--cta-h', `${h}px`)
-    else root.style.removeProperty('--cta-h')
+    const apply = () => {
+      const h = el.offsetHeight
+      if (h > 0) root.style.setProperty('--cta-h', `${h}px`)
+      else root.style.removeProperty('--cta-h')
+    }
+    apply()
+    const observer = new ResizeObserver(apply)
+    observer.observe(el)
     return () => {
+      observer.disconnect()
       root.style.removeProperty('--cta-h')
     }
   }, [visible])
@@ -95,6 +105,7 @@ export function MobileCtaBar() {
       <div className="flex items-center gap-3 px-5 py-3">
         <Link
           to="/connect/?intent=assessment"
+          viewTransition
           className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full bg-signal px-5 py-2 font-semibold text-kauri focus-visible:outline-signal"
         >
           Book a free assessment

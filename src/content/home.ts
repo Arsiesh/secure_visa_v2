@@ -1,14 +1,5 @@
 // Home page copy that is not covered by another content module. Verbatim from pages/home.md.
 
-import { brand } from './site'
-
-export const homeHero = {
-  headline: brand.heroHeadline,
-  lead: brand.tagline,
-  video: { label: 'Register for the free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
-  videoNote: 'If you want to know how get your residence visa in New Zealand, click the button below.',
-} as const
-
 export const homeSituation = {
   heading: 'Whatever your current situation, we can help you get your student visa approved',
   lines: [
@@ -20,7 +11,6 @@ export const homeSituation = {
 } as const
 
 export const homeSpecialists = {
-  heading: 'You need professional specialists that work with immigration consultants to secure a student permit for your unique situation.',
   body: [
     'We do not guarantee you miracle cures or instant success. Emigrating to a new country and gaining student permit as a stepping stone to obtain permanent residency requires hard work.',
     'What we promise is to be by your family’s side each step of the way, not just preparing for your new life… but long after you land and settle in. Remember, we’ve been through this process ourselves. We know how exciting yet terrifying it is and how lonely it can feel when you find yourself thousands of miles from home.',
@@ -30,9 +20,7 @@ export const homeSpecialists = {
 } as const
 
 export const homeProof = {
-  heading: 'We’ve helped dozens of families gain immigration and citizenship',
   headingAlt: 'We’ve helped hundreds of people start their immigration & fulfill their dreams',
-  cta: { label: 'Watch our free 60-min video to see how we can help you do the same', href: 'https://study.securevisa.com/now/' },
 } as const
 
 export const homePodcast = {

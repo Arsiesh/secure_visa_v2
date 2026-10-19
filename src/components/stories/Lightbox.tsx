@@ -1,4 +1,4 @@
-import { useEffect, useRef, type PointerEvent } from 'react'
+import { useEffect, useRef, type MouseEvent, type PointerEvent } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { imageMeta } from '../../content/imageMeta'
 import { useScrollLock } from '../../hooks/useScrollLock'
@@ -20,6 +20,7 @@ export function Lightbox({ items, index, onIndexChange, onClose }: LightboxProps
   const dialogRef = useRef<HTMLDialogElement>(null)
   const opener = useRef<HTMLElement | null>(null)
   const swipeStart = useRef<number | null>(null)
+  const swiped = useRef(false)
   const open = index !== null
   useScrollLock(open)
 
@@ -62,12 +63,21 @@ export function Lightbox({ items, index, onIndexChange, onClose }: LightboxProps
 
   const onPointerDown = (event: PointerEvent) => {
     swipeStart.current = event.clientX
+    swiped.current = false
   }
   const onPointerUp = (event: PointerEvent) => {
     if (swipeStart.current === null) return
     const delta = event.clientX - swipeStart.current
     swipeStart.current = null
-    if (Math.abs(delta) > SWIPE_PX) go(delta < 0 ? 1 : -1)
+    if (Math.abs(delta) > SWIPE_PX) {
+      swiped.current = true
+      go(delta < 0 ? 1 : -1)
+    }
+  }
+  // The stage fills the dialog, so a click on its own empty area (not the photo or buttons) is a click on the backdrop.
+  // A swipe that ends on empty stage also fires click there, so it must not close the viewer.
+  const onStageClick = (event: MouseEvent) => {
+    if (event.target === event.currentTarget && !swiped.current) dialogRef.current?.close()
   }
 
   const meta = item ? imageMeta[item.image] : undefined
@@ -81,9 +91,6 @@ export function Lightbox({ items, index, onIndexChange, onClose }: LightboxProps
       onClose={() => {
         onClose()
         opener.current?.focus()
-      }}
-      onClick={(event) => {
-        if (event.target === dialogRef.current) dialogRef.current?.close()
       }}
       onKeyDown={onKeyDown}
       className="on-dark m-0 size-full max-h-none max-w-none bg-kauri/95 p-0 text-white backdrop:bg-kauri/90 open:flex open:flex-col"
@@ -101,6 +108,7 @@ export function Lightbox({ items, index, onIndexChange, onClose }: LightboxProps
           </div>
           <div
             className="relative flex min-h-0 flex-1 touch-pan-y items-center justify-center px-2 sm:px-20"
+            onClick={onStageClick}
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
             onPointerCancel={() => (swipeStart.current = null)}

@@ -34,7 +34,7 @@ export function VerifyStrip() {
               {[makati, auckland].map((o) => (
                 <li key={o.id}>
                   <span className="block">{o.full}</span>
-                  <a href={mapsUrl(o.full)} target="_blank" rel="noopener noreferrer" className={clsx(linkClass, 'mt-0.5 inline-flex min-h-11 items-center gap-1.5 sm:min-h-0')}>
+                  <a href={mapsUrl(o.full)} target="_blank" rel="noopener noreferrer" className={clsx(linkClass, 'mt-0.5 inline-flex min-h-11 items-center gap-1.5')}>
                     <MapPin aria-hidden="true" className="size-4 shrink-0" />
                     <span>
                       Open in Google Maps<span className="sr-only">: {o.city} office</span>

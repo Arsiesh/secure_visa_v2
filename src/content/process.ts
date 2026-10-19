@@ -1,11 +1,12 @@
 // The five-step process and Pre / During / Post support. Copy from pages/process.md.
 
+import { funnel } from './site'
+
 export type ProcessStep = {
   step: 1 | 2 | 3 | 4 | 5
   title: string
   body: string
   image: string
-  imageAlt: string
 }
 
 export const processIntro = {
@@ -19,41 +20,36 @@ export const processSteps: ProcessStep[] = [
     title: 'Student Eligibility “Accelerator Assessment”',
     body: 'Remember, we’ve been through this process. We know how exciting it is but also how overwhelming it can get (not to mention the fear of being so far away from the rest of your family).\n\nWhen you work with us, you become part of our family. We then work with your family to help achieve your dream life.',
     image: 'process-section-02-image-01.webp',
-    imageAlt: '',
   },
   {
     step: 2,
     title: 'School Registration',
     body: 'With help from our Documentation Specialist, we’ll help you find, apply, and register for your study program—including regular meetings with our specialists so you get the information you need, when you need it (and so we can answer your most pressing questions at all times).',
     image: 'process-books-image.webp',
-    imageAlt: '',
   },
   {
     step: 3,
     title: 'Student Visa Application',
     body: 'Once you’re accepted into your new school, we’ll prepare you for your student visa application and make sure you have everything you need. From reviewing and preparing you for your English exam to ensuring you have all the forms and details you need, we set you up for a successful application (saving you time, money, and a lot of sleepless nights!).',
     image: 'process-section-02-image-03.webp',
-    imageAlt: '',
   },
   {
     step: 4,
     title: 'Finalizing Your Documents',
     body: 'At this stage, you’re almost ready to submit your visa application and begin your new life in an exciting new land…but first we have you work with one of our immigration lawyers/licensed immigration advisers to make sure everything is ready for submission—including a mock interview to help prepare you for your big day as well as lots of calls and meetings to ensure you have everything you need.',
     image: 'process-meeting-image.webp',
-    imageAlt: '',
   },
   {
     step: 5,
     title: 'Lodgement',
     body: 'The time has come to complete, signoff on, and submit your immigration forms, and you’ll continue to work with one of our experienced immigration specialists who’ll answer your questions, optimize your application, and prepare you for what comes next.',
     image: 'process-section-02-image-05.webp',
-    imageAlt: '',
   },
 ]
 
 export const processFootnote = {
   before: 'Of course, all this is only the tip of the iceberg! Our Free Online Presentation provides detailed insight into each step',
-  linkLabel: 'click here to access',
+  linkLabel: 'watch the free 60-min video',
   linkHref: 'https://study.securevisa.com/now/',
   after: 'AND…shows you how we personally work with you each step of the way.',
 } as const
@@ -86,6 +82,5 @@ export const supportPhases: SupportPhase[] = [
 export const processCta = {
   heading: 'Ready to see how we can make this proven process work for you and your family?',
   body: 'We invite you to join us for our free online presentation, where we break this process down in detail, share actual stories from students we’ve worked with, and help you decide whether working with us will help you and your family live your dream life.',
-  label: 'Attend our free NZ webinar now',
-  href: 'https://migrate.securevisa.com/nz-webinar',
+  ...funnel.nzWebinar,
 } as const

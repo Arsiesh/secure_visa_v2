@@ -6,7 +6,6 @@ import { arrivals, unnamedArrival } from './arrivals'
 export const storiesIntro = {
   title: 'Living your dream life in a brand new home!',
   lead: 'We’re committed to your success. In fact, we base our own success on yours. This doesn’t involve giving you a blueprint around how to apply. This sees us help you along each step of the journey—from the moment you think about immigrating to long after you land and settle in.',
-  hashtag: '#teamSacdalan',
   stat: 'We’ve helped more than 1,000 people begin their immigration to New Zealand.',
   subheading: 'When you work with us, you become part of our family.',
   invite: 'Here are a few people we’ve already had the pleasure of partnering with…',

@@ -43,6 +43,7 @@ export default function ProcessPage() {
             {processFootnote.before} (
             <a href={processFootnote.linkHref} className="font-semibold text-fern underline underline-offset-4 hover:text-fern-dark">
               {processFootnote.linkLabel}
+              <span className="sr-only"> the free online presentation</span>
             </a>
             ) {processFootnote.after}
           </p>

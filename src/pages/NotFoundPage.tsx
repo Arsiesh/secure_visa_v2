@@ -18,7 +18,8 @@ export default function NotFoundPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/" variant="onDark">Home</ButtonLink>
-            <ButtonLink href="/new-zealand-services/" variant="ghost">Destinations</ButtonLink>
+            <ButtonLink href="/new-zealand-services/" variant="ghost">New Zealand</ButtonLink>
+            <ButtonLink href="/canada-services/" variant="ghost">Canada</ButtonLink>
             <ButtonLink href="/connect/" variant="ghost">Connect</ButtonLink>
           </div>
         </Container>

@@ -33,7 +33,7 @@ const PLANE_PATH =
 function PlaneIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
-      <path d={PLANE_PATH} fill="currentColor" stroke="#fff" strokeWidth="1" />
+      <path d={PLANE_PATH} fill="currentColor" stroke="var(--color-paper)" strokeWidth="1" />
     </svg>
   )
 }

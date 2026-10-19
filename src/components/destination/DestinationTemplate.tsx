@@ -38,6 +38,7 @@ export function DestinationTemplate({ dest, description }: Props) {
           </p>
           <Link
             to="/process/"
+            viewTransition
             className="inline-flex min-h-12 items-center gap-2.5 rounded-full border-2 border-fern px-6 py-2.5 font-semibold text-fern transition-colors hover:bg-fern hover:text-white"
           >
             <Route aria-hidden="true" className="size-5" />

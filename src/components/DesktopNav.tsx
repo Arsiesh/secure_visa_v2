@@ -56,7 +56,7 @@ export function DesktopNav() {
                 end
                 className={({ isActive }) =>
                   clsx(
-                    'inline-flex min-h-11 items-center rounded-full px-4 text-base font-medium transition-colors hover:bg-white/10 hover:text-white',
+                    'inline-flex min-h-11 items-center rounded-full px-3 text-base xl:px-4 font-medium transition-colors hover:bg-white/10 hover:text-white',
                     isActive
                       ? 'text-white underline decoration-signal decoration-2 underline-offset-[10px]'
                       : 'text-white/80',

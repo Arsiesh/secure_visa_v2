@@ -101,7 +101,7 @@ export function EpisodeRow({ episode, featured = false }: EpisodeRowProps) {
             <button
               type="button"
               aria-expanded={open}
-              aria-controls={notesId}
+              aria-controls={open ? notesId : undefined}
               onClick={() => setOpen((v) => !v)}
               className="inline-flex min-h-11 items-center gap-1.5 font-semibold text-fern underline-offset-4 hover:underline"
             >

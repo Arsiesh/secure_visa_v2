@@ -42,15 +42,13 @@ function useRowCount() {
   return wide ? 5 : 2
 }
 
+const subscribeVisible = (cb: () => void) => {
+  document.addEventListener('visibilitychange', cb)
+  return () => document.removeEventListener('visibilitychange', cb)
+}
+
 function useDocumentVisible() {
-  return useSyncExternalStore(
-    (cb) => {
-      document.addEventListener('visibilitychange', cb)
-      return () => document.removeEventListener('visibilitychange', cb)
-    },
-    () => document.visibilityState === 'visible',
-    () => true,
-  )
+  return useSyncExternalStore(subscribeVisible, () => document.visibilityState === 'visible', () => true)
 }
 
 function useInView<T extends Element>() {

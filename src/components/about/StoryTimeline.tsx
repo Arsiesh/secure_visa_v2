@@ -126,7 +126,7 @@ export function StoryTimeline() {
         className="sticky top-[var(--header-h)] z-20 border-y border-line bg-paper/95 backdrop-blur"
       >
         <Container>
-          <ul ref={chipsRef} className="-mx-1 flex gap-1 overflow-x-auto py-2 [scrollbar-width:none]">
+          <ul ref={chipsRef} className="-mx-2 flex gap-1 overflow-x-auto px-2 py-2 [scrollbar-width:none]">
             {founderChapters.map((chapter) => (
               <li key={chapter.id} className="shrink-0">
                 <a

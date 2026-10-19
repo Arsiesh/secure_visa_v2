@@ -42,7 +42,7 @@ export function NameBoard() {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault()
-    if (trimmed) navigate(TARGET, { state })
+    navigate(TARGET, { state, viewTransition: true })
   }
 
   return (
@@ -77,9 +77,9 @@ export function NameBoard() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your first name"
-          className="block min-h-12 w-full min-w-0 rounded-input border-2 border-white/60 bg-white px-4 py-2.5 text-ink placeholder:text-ink-muted/70 sm:flex-1"
+          className="block min-h-12 w-full min-w-0 rounded-input border-2 border-white/60 bg-white px-4 py-2.5 text-ink placeholder:text-ink-muted sm:flex-1"
         />
-        <Link to={TARGET} state={state} className={buttonClass}>
+        <Link to={TARGET} state={state} viewTransition className={buttonClass}>
           Book a free assessment
         </Link>
       </div>

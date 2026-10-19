@@ -35,7 +35,7 @@ export function VideoFacade() {
             setPlaying(true)
           }}
           aria-label={`Play video: ${teamVideo.title}`}
-          className="group absolute inset-0 block size-full"
+          className="group absolute inset-0 block size-full focus-visible:outline-offset-[-6px] focus-visible:outline-signal"
         >
           <Img name={teamVideo.thumbnail} alt="" className="size-full object-cover" sizes="(min-width: 1024px) 720px, 100vw" />
           <span className="absolute inset-0 bg-kauri/25 transition-colors group-hover:bg-kauri/10" />

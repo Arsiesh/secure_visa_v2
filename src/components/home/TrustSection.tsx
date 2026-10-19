@@ -15,7 +15,7 @@ export function TrustSection() {
               role="region"
               tabIndex={0}
               aria-label="Partner school logos. Scroll sideways to see more."
-              className="mt-8 flex snap-x snap-proximity overflow-x-auto rounded-card bg-white py-4 [mask-image:linear-gradient(to_right,transparent,#000_3rem,#000_calc(100%-3rem),transparent)] [scrollbar-color:var(--color-line)_transparent] [scrollbar-width:thin]"
+              className="mt-8 flex snap-x snap-proximity overflow-x-auto rounded-card bg-white py-4 [mask-image:linear-gradient(to_right,transparent,#000_3rem,#000_calc(100%-3rem),transparent)] focus-visible:[mask-image:none] [scrollbar-color:var(--color-line)_transparent] [scrollbar-width:thin]"
             >
               {partners.stripTiles.map((tile) => (
                 <Img
@@ -33,7 +33,7 @@ export function TrustSection() {
           </div>
         </Container>
       </section>
-      <FeaturedIn tone="light" />
+      <FeaturedIn />
     </>
   )
 }

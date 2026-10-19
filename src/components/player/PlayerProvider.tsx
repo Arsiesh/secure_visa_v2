@@ -12,14 +12,14 @@ import {
   type PlayerStatus,
   type PlayerTime,
 } from './playerContext'
-import { clearPosition, loadPosition, savePosition } from './resume'
+import { RESUME_MIN } from '../podcast/savedPosition'
+import { loadPosition, savePosition } from './resume'
 
 // If the chunk is gone (a redeploy renamed it) or the network drops, fall back to a minimal bar instead of taking the site down.
 const PlayerBar = lazy(() => loadPlayerBar().catch(() => ({ default: PlayerBarFallback })))
 
 const SAVE_EVERY_MS = 5000
-/** Positions this close to the start or the end are not worth resuming. */
-const RESUME_MIN = 5
+/** Positions this close to the end are not worth resuming (RESUME_MIN covers the start). */
 const RESUME_END_MARGIN = 10
 
 type MediaSessionModule = typeof import('./mediaSession')
@@ -37,6 +37,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const triggerRef = useRef<HTMLElement | null>(null)
   const sessionRef = useRef<MediaSessionModule | null>(null)
   const resumeTimer = useRef<number | undefined>(undefined)
+  const statusRef = useRef<PlayerStatus>('idle')
 
   const [state, setState] = useState<PlayerState>({ episode: null, status: 'idle', rate: 1, resumedAt: null })
   const [time, setTime] = useState<PlayerTime>({ current: 0, duration: 0 })
@@ -163,6 +164,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       sessionRef.current = m
       m.bindHandlers(actions, () => audioRef.current)
       m.setMetadata(episode)
+      // 'playing' may already have fired while this chunk was loading.
+      m.setPlaybackState(statusRef.current)
     })
     return () => {
       live = false
@@ -170,6 +173,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   }, [episode, actions])
 
   useEffect(() => {
+    statusRef.current = state.status
     sessionRef.current?.setPlaybackState(state.status)
   }, [state.status])
 
@@ -233,9 +237,11 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   }
 
   const handleEnded = () => {
+    const a = audioRef.current
     const ep = episodeRef.current
-    if (!ep) return
-    clearPosition(ep.number)
+    if (!a || !ep) return
+    // Same value close() would save, so the row reads "Played" whether or not the bar is closed afterwards.
+    savePosition(ep.number, Number.isFinite(a.duration) && a.duration > 0 ? a.duration : ep.durationSeconds)
     setStatus('paused')
     setAnnouncement(`Episode ${ep.number} finished`)
   }
