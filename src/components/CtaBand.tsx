@@ -33,7 +33,7 @@ export function CtaBand({
   return (
     <section aria-labelledby={headingId} className={clsx('bg-paper py-10 sm:py-14 lg:py-20', className)}>
       <Container>
-        <div className="on-dark overflow-hidden rounded-[2rem] bg-kauri text-white">
+        <div data-cta-zone className="on-dark overflow-hidden rounded-[2rem] bg-kauri text-white">
           <div className="grid items-end gap-x-12 px-6 pt-10 sm:px-10 sm:pt-12 lg:grid-cols-12 lg:items-center lg:px-14 lg:py-12">
             <div className="pb-10 sm:pb-12 lg:col-span-8 lg:pb-0">
               <h2 id={headingId} className="font-display max-w-[26ch] text-[clamp(2rem,3vw,2.75rem)]">

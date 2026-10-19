@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { processIntro, processSteps } from '../../content/process'
 import { ButtonLink } from '../ButtonLink'
@@ -37,6 +38,14 @@ export function ProcessPreview() {
               <div>
                 <h3 className="text-[1.1875rem] font-semibold leading-snug">{SUMMARY[s.step].title}</h3>
                 <p className="mt-1.5 max-w-[34ch] text-[1rem] text-ink-muted">{SUMMARY[s.step].line}</p>
+                {s.step === 1 ? (
+                  <Link
+                    to="/connect/?intent=assessment"
+                    className="mt-1 inline-flex min-h-11 items-center font-semibold text-fern underline underline-offset-4 hover:text-kauri"
+                  >
+                    Book your free assessment
+                  </Link>
+                ) : null}
               </div>
             </li>
           ))}

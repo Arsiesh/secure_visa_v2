@@ -172,7 +172,7 @@ export function FindYourRoute() {
           </form>
         </div>
 
-        <div className="flex flex-wrap items-start gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
+        <div data-cta-zone className="flex flex-wrap items-start gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
           <div className="max-w-[22rem]">
             <ButtonLink href={bookHref}>Book my free assessment</ButtonLink>
             <p className="mt-2 text-[0.9375rem] leading-snug text-ink-muted">Free. We don’t charge you a fee just to speak to us.</p>

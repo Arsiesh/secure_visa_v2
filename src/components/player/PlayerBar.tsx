@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { ChevronUp, Loader2, Pause, Play, RotateCcw, RotateCw, X } from 'lucide-react'
 import clsx from 'clsx'
+import { Link } from 'react-router-dom'
 import { platforms } from '../../content/podcast'
 import { Img } from '../Img'
 import { formatClock, spokenDuration, spokenLength } from './format'
@@ -64,7 +65,7 @@ export default function PlayerBar() {
         <div className="h-full bg-signal" style={{ width: `${pct}%` }} />
       </div>
 
-      <div className="mx-auto grid max-w-[96rem] grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-x-2 gap-y-1 px-3 py-2 sm:px-5 md:grid-cols-[minmax(0,17rem)_auto_auto_auto_auto_minmax(8rem,1fr)_auto] md:gap-x-3 md:py-3 lg:grid-cols-[minmax(0,24rem)_auto_auto_auto_auto_minmax(8rem,1fr)_auto] lg:px-8">
+      <div className="mx-auto grid max-w-[96rem] grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-x-2 gap-y-1 px-3 py-2 sm:px-5 md:grid-cols-[minmax(0,17rem)_auto_auto_auto_auto_minmax(8rem,1fr)_auto] md:gap-x-3 md:py-3 lg:grid-cols-[minmax(0,24rem)_auto_auto_auto_auto_minmax(8rem,1fr)_auto_auto] lg:px-8">
         <div
           className="col-start-1 row-start-1 flex min-w-0 items-center gap-3 md:cursor-default"
           onClick={() => setExpanded((v) => !v)}
@@ -155,11 +156,22 @@ export default function PlayerBar() {
           <ChevronUp aria-hidden="true" className={clsx('size-6 transition-transform motion-reduce:transition-none', expanded && 'rotate-180')} />
         </button>
 
+        <Link
+          to="/connect/?intent=assessment"
+          className={clsx(
+            'col-span-full row-start-5 min-h-11 items-center justify-center text-sm text-white/85 underline underline-offset-4 hover:text-white lg:col-span-1 lg:col-start-7 lg:row-start-1 lg:justify-self-end lg:whitespace-nowrap',
+            'hidden lg:flex',
+            expanded && 'max-md:flex',
+          )}
+        >
+          Book a free assessment
+        </Link>
+
         <button
           type="button"
           onClick={actions.close}
           aria-label="Close player"
-          className={clsx(iconButton, 'col-start-4 row-start-1 md:col-start-7')}
+          className={clsx(iconButton, 'col-start-4 row-start-1 md:col-start-7 lg:col-start-8')}
         >
           <X aria-hidden="true" className="size-6" />
         </button>

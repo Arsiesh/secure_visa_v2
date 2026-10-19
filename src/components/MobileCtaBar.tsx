@@ -12,6 +12,7 @@ export function MobileCtaBar() {
   const [pastFold, setPastFold] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const [footerInView, setFooterInView] = useState(false)
+  const [zoneInView, setZoneInView] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setPastFold(window.scrollY > window.innerHeight * 0.8)
@@ -28,8 +29,46 @@ export function MobileCtaBar() {
     return () => io.disconnect()
   }, [pathname])
 
+  // One observer for every [data-cta-zone]. The DOM swaps on navigation, so re-query when <main>'s children change.
+  useEffect(() => {
+    const inView = new Set<Element>()
+    const watched = new Set<Element>()
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) inView.add(e.target)
+        else inView.delete(e.target)
+      }
+      setZoneInView(inView.size > 0)
+    })
+    const scan = () => {
+      const zones = new Set(document.querySelectorAll('[data-cta-zone]'))
+      for (const el of watched) {
+        if (!zones.has(el)) {
+          io.unobserve(el)
+          watched.delete(el)
+          inView.delete(el)
+        }
+      }
+      for (const el of zones) {
+        if (!watched.has(el)) {
+          io.observe(el)
+          watched.add(el)
+        }
+      }
+      setZoneInView(inView.size > 0)
+    }
+    scan()
+    const main = document.querySelector('main')
+    const mo = new MutationObserver(scan)
+    if (main) mo.observe(main, { childList: true, subtree: true })
+    return () => {
+      mo.disconnect()
+      io.disconnect()
+    }
+  }, [pathname])
+
   const onConnect = pathname.replace(/\/+$/, '').endsWith('/connect')
-  const visible = pastFold && !footerInView && !episode && !onConnect
+  const visible = pastFold && !footerInView && !zoneInView && !episode && !onConnect
 
   useEffect(() => {
     const root = document.documentElement

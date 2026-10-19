@@ -249,7 +249,7 @@ export function ArrivalsHero() {
 
         <div className="lg:col-start-1 lg:row-start-2 lg:self-start">
           <p className="max-w-[46ch] text-[1.125rem] leading-relaxed text-white/90">{heroLead}</p>
-          <div className="mt-5 flex flex-wrap gap-3 lg:mt-7">
+          <div data-cta-zone className="mt-5 flex flex-wrap gap-3 lg:mt-7">
             <ButtonLink href={funnel.nzWebinar.href} variant="onDark" icon={ExternalLink} iconPosition="end">
               {funnel.nzWebinar.label}
               <span className="sr-only"> (opens Secure Visa’s webinar page)</span>
