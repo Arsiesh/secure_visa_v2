@@ -8,6 +8,7 @@ import { Lightbox, type LightboxItem } from '../components/stories/Lightbox'
 import { ReviewsWall } from '../components/stories/ReviewsWall'
 import { arrivalPhotos, extraArrivalPhoto, reviewGraphics, storiesIntro, type StoryPhoto } from '../content/stories'
 import { longTestimonials } from '../content/testimonials'
+import { headerCta } from '../content/site'
 
 const wallPhotos: StoryPhoto[] = [
   ...arrivalPhotos,
@@ -85,7 +86,7 @@ export default function StoriesPage() {
         </Container>
       </section>
 
-      <CtaBand label="Book a free assessment" href="/connect/" />
+      <CtaBand label={headerCta.label} href={headerCta.href} />
 
       <Lightbox
         items={items}

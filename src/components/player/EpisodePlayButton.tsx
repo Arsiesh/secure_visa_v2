@@ -1,7 +1,7 @@
 import { Loader2, Pause, Play } from 'lucide-react'
 import clsx from 'clsx'
 import type { PodcastEpisode } from '../../content/podcast'
-import { loadPlayerBar } from './playerBarLoader'
+import { preloadPlayerBar } from './playerBarLoader'
 import { usePlayerActions, usePlayerState } from './playerContext'
 
 type EpisodePlayButtonProps = {
@@ -38,8 +38,8 @@ export function EpisodePlayButton({ episode, label, activeLabel = 'Pause', varia
       type="button"
       aria-label={name}
       onClick={() => (isCurrent ? toggle() : play(episode))}
-      onPointerEnter={loadPlayerBar}
-      onFocus={loadPlayerBar}
+      onPointerEnter={preloadPlayerBar}
+      onFocus={preloadPlayerBar}
       className={clsx(
         'inline-flex shrink-0 items-center justify-center text-[1.0625rem] font-semibold leading-tight transition-colors duration-200 focus-visible:outline-offset-4',
         variants[variant],

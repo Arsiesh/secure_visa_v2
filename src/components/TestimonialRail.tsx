@@ -79,10 +79,10 @@ export function TestimonialRail({ items, label, heading, tone = 'light', classNa
   }
 
   const navButton = clsx(
-    'inline-flex size-12 items-center justify-center rounded-full border-2 transition-colors disabled:cursor-not-allowed disabled:opacity-35',
+    'inline-flex size-12 items-center justify-center rounded-full border-2 transition-colors aria-disabled:cursor-not-allowed aria-disabled:opacity-35',
     dark
-      ? 'border-white/60 text-white hover:bg-white/10 disabled:hover:bg-transparent'
-      : 'border-fern text-fern hover:bg-fern hover:text-white disabled:hover:bg-transparent disabled:hover:text-fern',
+      ? 'border-white/60 text-white hover:bg-white/10 aria-disabled:hover:bg-transparent'
+      : 'border-fern text-fern hover:bg-fern hover:text-white aria-disabled:hover:bg-transparent aria-disabled:hover:text-fern',
   )
 
   return (
@@ -101,11 +101,11 @@ export function TestimonialRail({ items, label, heading, tone = 'light', classNa
           <span />
         )}
         <div className="flex shrink-0 gap-2">
-          <button type="button" className={navButton} disabled={edge.start} onClick={() => scrollByCard(-1)}>
+          <button type="button" className={navButton} aria-disabled={edge.start} onClick={() => !edge.start && scrollByCard(-1)}>
             <ChevronLeft aria-hidden="true" className="size-6" />
             <span className="sr-only">Previous testimonials</span>
           </button>
-          <button type="button" className={navButton} disabled={edge.end} onClick={() => scrollByCard(1)}>
+          <button type="button" className={navButton} aria-disabled={edge.end} onClick={() => !edge.end && scrollByCard(1)}>
             <ChevronRight aria-hidden="true" className="size-6" />
             <span className="sr-only">Next testimonials</span>
           </button>

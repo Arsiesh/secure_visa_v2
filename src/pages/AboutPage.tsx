@@ -6,6 +6,7 @@ import { FeaturedIn } from '../components/FeaturedIn'
 import { Img } from '../components/Img'
 import { StoryTimeline } from '../components/about/StoryTimeline'
 import { foundersIntro } from '../content/founders'
+import { headerCta } from '../content/site'
 
 // From the founders' bio on the team page, verbatim from "Hence" onwards.
 const WHY_FOUNDED =
@@ -58,7 +59,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <CtaBand label="Book a free assessment" href="/connect/" />
+      <CtaBand label={headerCta.label} href={headerCta.href} />
       <FeaturedIn />
     </>
   )

@@ -6,7 +6,10 @@ import { SiteHeader } from '../components/SiteHeader'
 import { MobileCtaBar } from '../components/MobileCtaBar'
 import { PlayerProvider } from '../components/player/PlayerProvider'
 
-const loadFeatures = () => import('../lib/motionFeatures').then((r) => r.default)
+// Retried once. If it still fails the rejection propagates and Vite's vite:preloadError handler (main.tsx) reloads the page,
+// since m.* elements would otherwise stay stuck at `initial`.
+const importFeatures = () => import('../lib/motionFeatures').then((r) => r.default)
+const loadFeatures = () => importFeatures().catch(importFeatures)
 
 export function RootLayout() {
   const { pathname } = useLocation()

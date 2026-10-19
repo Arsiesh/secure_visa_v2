@@ -4,6 +4,7 @@ import { Img } from '../components/Img'
 import { EpisodeArchive } from '../components/podcast/EpisodeArchive'
 import { EpisodePlayButton } from '../components/player/EpisodePlayButton'
 import { episodes, platforms, podcastIntro, showDescription } from '../content/podcast'
+import { headerCta } from '../content/site'
 
 const latest = episodes[0]
 
@@ -74,7 +75,7 @@ export default function PodcastPage() {
         </Container>
       </section>
 
-      <CtaBand label="Book a free assessment" href="/connect/" />
+      <CtaBand label={headerCta.label} href={headerCta.href} />
     </>
   )
 }

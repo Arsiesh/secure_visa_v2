@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ExternalLink, Mail, Phone } from 'lucide-react'
-import { brand, contact, funnel, icef, legalLinks, nav, offices, socials, isNavGroup } from '../content/site'
+import { brand, contact, funnel, headerCta, icef, legalLinks, nav, offices, socials, isNavGroup } from '../content/site'
 import { ButtonLink } from './ButtonLink'
 import { Container } from './Container'
 import { Img } from './Img'
@@ -26,7 +26,7 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-col items-start gap-3 lg:col-span-5 lg:items-end lg:text-right">
-            <ButtonLink href="/connect/" variant="onDark">
+            <ButtonLink href={headerCta.href} variant="onDark">
               Book a free assessment
             </ButtonLink>
             <ButtonLink href={funnel.nzWebinar.href} variant="ghost" icon={ExternalLink} iconPosition="end">

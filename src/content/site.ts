@@ -79,7 +79,7 @@ export const nav: NavItem[] = [
   { label: 'Podcast', href: '/podcast/' },
 ]
 
-export const headerCta = { label: 'Book a free assessment', href: '/connect/' } as const
+export const headerCta = { label: 'Book a free assessment', href: '/connect/?intent=assessment' } as const
 
 /** Legal pages live on the current securevisa.com site. (Their /disclaimer/ page returned 404 at scrape time, so it is left out.) */
 export const legalLinks: { label: string; href: string }[] = [

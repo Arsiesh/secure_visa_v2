@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Check, Copy, Mail, Phone } from 'lucide-react'
 import clsx from 'clsx'
 import { CircleAlert } from 'lucide-react'
@@ -63,19 +63,30 @@ export function ContactForm({ initial }: { initial: FormValues }) {
       requestAnimationFrame(() => summaryRef.current?.focus())
       return
     }
-    void submitInquiry(values).then((r) => {
-      setResult(r)
-      requestAnimationFrame(() => confirmRef.current?.focus())
-    })
+    submitInquiry(values)
+      .catch((): SubmitResult => {
+        // Never fail silently: show the copyable message so the visitor can still reach us.
+        openMailto(values)
+        return 'handed-off'
+      })
+      .then((r) => {
+        setResult(r)
+        requestAnimationFrame(() => confirmRef.current?.focus())
+      })
   }
 
-  const copy = async (text: string) => {
+  const copyTimer = useRef<number>(undefined)
+  useEffect(() => () => window.clearTimeout(copyTimer.current), [])
+
+  const copy = async (text: string, done: string) => {
+    window.clearTimeout(copyTimer.current)
     try {
       await navigator.clipboard.writeText(text)
-      setCopied('Copied')
+      setCopied(done)
     } catch {
       setCopied('Could not copy. Select the text and copy it by hand.')
     }
+    copyTimer.current = window.setTimeout(() => setCopied(''), 3000)
   }
 
   const reset = () => {
@@ -124,17 +135,17 @@ export function ContactForm({ initial }: { initial: FormValues }) {
               className="block w-full rounded-input border-2 border-line-strong bg-white px-4 py-3 text-base text-ink"
             />
             <div className="mt-4 flex flex-wrap gap-3">
-              <button type="button" onClick={() => copy(full)} className={btn}>
+              <button type="button" onClick={() => copy(full, 'Message copied')} className={btn}>
                 <Copy aria-hidden="true" className="size-5" />
                 Copy message
               </button>
-              <button type="button" onClick={() => copy(contact.email)} className={btn}>
+              <button type="button" onClick={() => copy(contact.email, 'Email address copied')} className={btn}>
                 <Mail aria-hidden="true" className="size-5" />
                 Copy our email address
               </button>
             </div>
             <p role="status" aria-live="polite" className="mt-3 flex min-h-6 items-center gap-1.5 font-medium text-fern">
-              {copied === 'Copied' ? <Check aria-hidden="true" className="size-4" /> : null}
+              {copied.endsWith(' copied') ? <Check aria-hidden="true" className="size-4" /> : null}
               {copied}
             </p>
             <div className="mt-4 flex flex-wrap gap-3 border-t border-line pt-6">

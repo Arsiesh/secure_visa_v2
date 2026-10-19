@@ -7,6 +7,7 @@ import { TeamGrid } from '../components/team/TeamGrid'
 import { VideoFacade } from '../components/team/VideoFacade'
 import { founders, teamIntro, teamVideo } from '../content/team'
 import { podcastIntro } from '../content/podcast'
+import { headerCta } from '../content/site'
 
 export default function TeamPage() {
   return (
@@ -87,7 +88,7 @@ export default function TeamPage() {
         </Container>
       </section>
 
-      <CtaBand label="Book a free assessment" href="/connect/" />
+      <CtaBand label={headerCta.label} href={headerCta.href} />
     </>
   )
 }

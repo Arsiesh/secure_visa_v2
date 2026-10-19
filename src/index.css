@@ -39,6 +39,8 @@
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
     scroll-padding-top: 6rem;
+    /* Keeps keyboard focus clear of the fixed podcast player and mobile CTA bar; each sets its own height variable. */
+    scroll-padding-bottom: calc(var(--player-h, 0px) + var(--cta-h, 0px) + 1rem);
   }
 
   body {

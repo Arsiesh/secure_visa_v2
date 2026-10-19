@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, m } from 'motion/react'
 import { Mail, Menu, Phone, X } from 'lucide-react'
@@ -55,6 +56,8 @@ export function MobileMenu() {
         <span className="sr-only">Open menu</span>
       </button>
 
+      {/* Portalled to <body>: the header's backdrop-filter would otherwise be the containing block for this fixed sheet. */}
+      {createPortal(
       <AnimatePresence>
         {open ? (
           <m.div
@@ -128,7 +131,9 @@ export function MobileMenu() {
             </div>
           </m.div>
         ) : null}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body,
+      )}
     </>
   )
 }

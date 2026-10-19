@@ -20,8 +20,12 @@ export default function PlayerBar() {
   const actions = usePlayerActions()
   const [expanded, setExpanded] = useState(false)
   const barRef = useRef<HTMLElement>(null)
+  // What the seek slider tells assistive tech. It follows the live position only on user actions and state changes, never on time ticks.
+  const [announced, setAnnounced] = useState(0)
+  const positionRef = useRef(0)
+  const episodeNumber = episode?.number
 
-  // Publish the bar's height so the page can leave room for it, and keep focused elements out from behind it.
+  // Publish the bar's height so the page can leave room for it, and html's scroll-padding-bottom (index.css) keeps focused elements out from behind it.
   useEffect(() => {
     const el = barRef.current
     if (!el) return
@@ -29,7 +33,6 @@ export default function PlayerBar() {
     const apply = () => {
       const h = el.offsetHeight
       root.style.setProperty('--player-h', `${h}px`)
-      root.style.setProperty('scroll-padding-bottom', `${h + 16}px`)
     }
     apply()
     const observer = new ResizeObserver(apply)
@@ -37,14 +40,21 @@ export default function PlayerBar() {
     return () => {
       observer.disconnect()
       root.style.removeProperty('--player-h')
-      root.style.removeProperty('scroll-padding-bottom')
     }
   }, [])
+
+  useEffect(() => {
+    positionRef.current = Math.min(current, Math.max(duration, 1))
+  })
+  useEffect(() => {
+    setAnnounced(positionRef.current)
+  }, [status, episodeNumber])
 
   if (!episode) return null
 
   const max = Math.max(duration, 1)
   const position = Math.min(current, max)
+  const announce = (seconds: number) => setAnnounced(Math.min(Math.max(0, seconds), max))
   const pct = (position / max) * 100
   const isPlaying = status === 'playing' || status === 'loading'
   const nextRate = PLAYBACK_RATES[(PLAYBACK_RATES.indexOf(rate) + 1) % PLAYBACK_RATES.length]
@@ -101,7 +111,10 @@ export default function PlayerBar() {
         <div className={clsx('col-span-full row-start-2 flex items-center justify-center gap-8 pt-1 md:contents', extra)}>
           <button
             type="button"
-            onClick={() => actions.skip(-15)}
+            onClick={() => {
+              actions.skip(-15)
+              announce(position - 15)
+            }}
             aria-label="Back 15 seconds"
             className={clsx(iconButton, 'relative md:col-start-2 md:row-start-1')}
           >
@@ -111,7 +124,10 @@ export default function PlayerBar() {
 
           <button
             type="button"
-            onClick={() => actions.skip(30)}
+            onClick={() => {
+              actions.skip(30)
+              announce(position + 30)
+            }}
             aria-label="Forward 30 seconds"
             className={clsx(iconButton, 'relative md:col-start-4 md:row-start-1')}
           >
@@ -138,9 +154,14 @@ export default function PlayerBar() {
             max={max}
             step={5}
             value={position}
-            onChange={(e) => actions.seek(Number(e.target.value))}
+            onChange={(e) => {
+              actions.seek(Number(e.target.value))
+              announce(Number(e.target.value))
+            }}
+            onFocus={() => announce(position)}
             aria-label="Seek"
-            aria-valuetext={`${spokenDuration(position)} of ${spokenLength(max)}`}
+            aria-valuenow={announced}
+            aria-valuetext={`${spokenDuration(announced)} of ${spokenLength(max)}`}
             style={{ '--pct': `${pct}%` } as CSSProperties}
           />
           <span className="font-board w-[4.5ch] shrink-0 text-base tabular-nums text-white/90">{formatClock(max)}</span>

@@ -107,7 +107,8 @@ export function ArrivalsHero() {
 
   // Derived, not synced: if the viewport shrinks to fewer rows, the selected row clamps.
   const cur = Math.min(photo.cur, rows.length - 1)
-  const running = !reduced && introDone && inView && tabVisible && !hovering && !focusWithin && !pinned && !userPaused
+  const paused = pinned || userPaused
+  const running = !reduced && introDone && inView && tabVisible && !hovering && !focusWithin && !paused
 
   useEffect(() => {
     if (reduced) return
@@ -172,11 +173,18 @@ export function ArrivalsHero() {
             {!reduced ? (
               <button
                 type="button"
-                onClick={() => setUserPaused((p) => !p)}
+                onClick={() => {
+                  if (paused) {
+                    setPinned(false)
+                    setUserPaused(false)
+                  } else {
+                    setUserPaused(true)
+                  }
+                }}
                 className="absolute right-2 top-2 inline-flex size-11 items-center justify-center rounded-full bg-kauri/85 text-white hover:bg-kauri"
               >
-                {userPaused ? <Play aria-hidden="true" className="size-4" /> : <Pause aria-hidden="true" className="size-4" />}
-                <span className="sr-only">{userPaused ? 'Resume the arrivals photos' : 'Pause the arrivals photos'}</span>
+                {paused ? <Play aria-hidden="true" className="size-4" /> : <Pause aria-hidden="true" className="size-4" />}
+                <span className="sr-only">{paused ? 'Resume the arrivals photos' : 'Pause the arrivals photos'}</span>
               </button>
             ) : null}
           </div>
@@ -266,7 +274,10 @@ export function ArrivalsHero() {
               rel="noopener noreferrer"
             >
               <Img name={icef.badge} alt="" className="h-14 w-auto shrink-0 rounded-[6px] bg-white p-1" />
-              <span>ICEF accredited agency #{icef.agencyNumber}</span>
+              <span>
+                ICEF accredited agency #{icef.agencyNumber}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </span>
             </a>
             <p className="sm:border-l sm:border-line-dark sm:pl-8">
               {partners.institutions} {partners.institutionsLabel}

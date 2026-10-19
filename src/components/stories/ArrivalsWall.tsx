@@ -24,7 +24,7 @@ export function ArrivalsWall({ photos, onOpen }: ArrivalsWallProps) {
             className={clsx(
               'relative',
               !big && 'aspect-square',
-              big && bigOnPhone && 'col-span-2 row-span-2',
+              big && bigOnPhone && 'col-span-2 row-span-2 aspect-square sm:aspect-auto',
               big && !bigOnPhone && 'aspect-square sm:aspect-auto',
               big && 'sm:col-span-2 sm:row-span-2',
             )}

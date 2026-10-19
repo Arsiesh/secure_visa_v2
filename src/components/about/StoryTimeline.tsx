@@ -77,6 +77,7 @@ function Chapter({ chapter, flip }: ChapterProps) {
 /** The origin story as a route: dated stops along a line that fills while the reader scrolls. */
 export function StoryTimeline() {
   const listRef = useRef<HTMLOListElement>(null)
+  const chipsRef = useRef<HTMLUListElement>(null)
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: listRef, offset: ['start 55%', 'end 55%'] })
   const [activeId, setActiveId] = useState<string | null>(founderChapters[0].id)
@@ -103,6 +104,18 @@ export function StoryTimeline() {
     }
   }, [])
 
+  // Keep the active chip visible inside the horizontal strip, without moving the page.
+  useEffect(() => {
+    const list = chipsRef.current
+    const chip = activeId ? list?.querySelector<HTMLElement>(`[data-chip="${activeId}"]`) : null
+    if (!list || !chip) return
+    const target = chip.parentElement ?? chip
+    list.scrollTo({
+      left: target.offsetLeft - list.clientWidth / 2 + target.offsetWidth / 2,
+      behavior: reduce ? 'auto' : 'smooth',
+    })
+  }, [activeId, reduce])
+
   return (
     <section aria-labelledby="story-heading" className="bg-paper">
       <h2 id="story-heading" className="sr-only">
@@ -113,11 +126,12 @@ export function StoryTimeline() {
         className="sticky top-[var(--header-h)] z-20 border-y border-line bg-paper/95 backdrop-blur"
       >
         <Container>
-          <ul className="-mx-1 flex gap-1 overflow-x-auto py-2 [scrollbar-width:none]">
+          <ul ref={chipsRef} className="-mx-1 flex gap-1 overflow-x-auto py-2 [scrollbar-width:none]">
             {founderChapters.map((chapter) => (
               <li key={chapter.id} className="shrink-0">
                 <a
                   href={`#${chapter.id}`}
+                  data-chip={chapter.id}
                   aria-current={activeId === chapter.id ? 'location' : undefined}
                   className={clsx(
                     'flex min-h-11 items-center rounded-full px-3.5 text-base font-medium transition-colors',

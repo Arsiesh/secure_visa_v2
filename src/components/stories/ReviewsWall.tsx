@@ -28,7 +28,7 @@ export function ReviewsWall({ reviews, onOpen }: ReviewsWallProps) {
         {reviews.slice(0, visible).map((review, index) => (
           <li
             key={review.id}
-            className="[content-visibility:auto] [contain-intrinsic-size:auto_300px]"
+            className="[content-visibility:auto] [contain-intrinsic-block-size:auto_300px]"
           >
             <button
               type="button"

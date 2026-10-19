@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { PodcastEpisode } from '../../content/podcast'
+import PlayerBarFallback from './PlayerBarFallback'
 import { loadPlayerBar } from './playerBarLoader'
 import {
   PlayerActionsContext,
@@ -13,7 +14,8 @@ import {
 } from './playerContext'
 import { clearPosition, loadPosition, savePosition } from './resume'
 
-const PlayerBar = lazy(loadPlayerBar)
+// If the chunk is gone (a redeploy renamed it) or the network drops, fall back to a minimal bar instead of taking the site down.
+const PlayerBar = lazy(() => loadPlayerBar().catch(() => ({ default: PlayerBarFallback })))
 
 const SAVE_EVERY_MS = 5000
 /** Positions this close to the start or the end are not worth resuming. */
@@ -66,6 +68,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       const limit = Number.isFinite(a.duration) && a.duration > 0 ? a.duration : ep.durationSeconds
       const target = Math.min(Math.max(0, seconds), limit)
       a.currentTime = target
+      startAtRef.current = 0
+      sessionRef.current?.setPosition(a)
       setTime((t) => ({ ...t, current: target }))
       setState((s) => (s.resumedAt === null ? s : { ...s, resumedAt: null }))
       savePosition(ep.number, target)
@@ -112,6 +116,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         if (a) {
           a.defaultPlaybackRate = rate
           a.playbackRate = rate
+          sessionRef.current?.setPosition(a)
         }
         setState((s) => ({ ...s, rate }))
         setAnnouncement(`Speed ${rate} times`)
@@ -139,9 +144,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         setState((s) => ({ ...s, episode: null, status: 'idle', resumedAt: null }))
         setAnnouncement('Player closed')
         const trigger = triggerRef.current
-        // Wait for the bar to leave the DOM, then hand focus back to the button that started the episode.
+        // Wait for the bar to leave the DOM, then hand focus back to the button that started the episode,
+        // or to <main> if that button is gone (the episode was started on another page).
         requestAnimationFrame(() => {
-          if (trigger?.isConnected) trigger.focus()
+          ;(trigger?.isConnected ? trigger : document.getElementById('main'))?.focus({ preventScroll: true })
         })
       },
     }
@@ -187,6 +193,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     startAtRef.current = 0
     if (startAt > 0) {
       a.currentTime = startAt
+      sessionRef.current?.setPosition(a)
       setState((s) => ({ ...s, resumedAt: startAt }))
       setAnnouncement(`Resumed Episode ${ep.number} at ${Math.floor(startAt / 60)} minutes ${Math.floor(startAt % 60)} seconds`)
       window.clearTimeout(resumeTimer.current)

@@ -7,8 +7,16 @@ const lazyPage = (load: () => Promise<{ default: React.ComponentType }>): Pick<R
   lazy: async () => ({ Component: (await load()).default }),
 })
 
+// Last safety net: if the layout itself or its chunks fail, this renders on its own, without the header or footer.
+const rootError = (
+  <main id="main" className="min-h-[60vh]">
+    <RouteErrorPage />
+  </main>
+)
+
 const router = createBrowserRouter([
   {
+    errorElement: rootError,
     element: <RootLayout />,
     hydrateFallbackElement: <div className="h-[var(--header-h)] bg-kauri" aria-hidden="true" />,
     children: [

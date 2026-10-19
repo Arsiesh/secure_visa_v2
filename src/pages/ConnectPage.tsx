@@ -16,11 +16,14 @@ const PARTY_MESSAGE: Record<string, string> = {
 
 function initialValues(params: URLSearchParams): FormValues {
   const destination = params.get('destination')
+  const party = params.get('party') ?? ''
   let inquiry = ''
   if (destination === 'nz') inquiry = inquiries[1]
   else if (destination === 'canada') inquiry = inquiries[0]
-  if (params.get('nurse') === '1') inquiry = inquiries[2]
-  return { name: '', email: '', phone: '', inquiry, message: PARTY_MESSAGE[params.get('party') ?? ''] ?? '' }
+  // The nurse pathway is a New Zealand one, so it never overrides an explicit Canada choice.
+  if (params.get('nurse') === '1' && destination !== 'canada') inquiry = inquiries[2]
+  const message = Object.hasOwn(PARTY_MESSAGE, party) ? PARTY_MESSAGE[party] : ''
+  return { name: '', email: '', phone: '', inquiry, message }
 }
 
 const STEPS = [
