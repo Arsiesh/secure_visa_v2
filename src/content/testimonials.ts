@@ -19,47 +19,11 @@ export const testimonials: Testimonial[] = [
       'Since I am still on the initial stages of my application, I know I still have to go through different processes. So far, they were able to manage expectations and estimated timelines. Also, I’d like to commend Ms. Marjorie for responding to me in a timely manner and for the patience as I have many questions. And I expect more of the same throughout the entire process. Because of this, I feel secure in my application and am truly looking forward to achieving the student visa. Also, I would like to give a shout out to Ms. Gracey, thank you for the follow up.',
   },
   {
-    id: 'abi-gail',
-    name: 'Abi Gail',
-    photo: '215480157-4088013214581738-8880989863341671648-n.webp',
-    quote: 'Quality service. Security wise.',
-  },
-  {
-    id: 'elma-magsino-mendoza',
-    name: 'Elma Magsino Mendoza',
-    photo: '268283082-4937792192939952-4212081043654752730-n.webp',
-    quote: 'You will really feel in them that they won’t let you down. Thank you Secure Visa. God bless and keep safe!',
-  },
-  {
-    id: 'tinee-rodrigo',
-    name: 'Tinee Rodrigo',
-    photo: '269987839-10158410698276272-4308213972050667279-n.webp',
-    quote: 'Quality of service and hands on guidance.',
-  },
-  {
-    id: 'jesus-jay-vinluan',
-    name: 'Jesus Jay Vinluan',
-    photo: '231139566-10208785756116605-3331032055217870605-n.webp',
+    id: 'grace-pantisma',
+    name: 'Grace Pantisma',
+    photo: '121621447-10225351582043543-1679991506926286475-n.webp',
     quote:
-      'The clarity call was very clear, understandable and enlightening. We’re so glad to start our future plans with Secure Visa. May Pag-asa sa Secure Visa!',
-  },
-  {
-    id: 'allan-de-guzman-santos',
-    name: 'Allan De Guzman Santos',
-    photo: '271996142-3086619211555200-7609655837062922218-n.webp',
-    quote: 'Their professionalism and commitment are impressive, they also make sure that they hear your concerns.',
-  },
-  {
-    id: 'kristi-montanez-banas',
-    name: 'Kristi Montañez Bañas',
-    photo: '248529537-10220695464478647-8161323738116988945-n.webp',
-    quote: 'Customer Satisfaction Guaranteed!',
-  },
-  {
-    id: 'kay-montanez-banas',
-    name: 'Kay Montañez-Bañas',
-    photo: '247701045-4881622575190982-246891289864431232-n.webp',
-    quote: 'Best Valued Consulting Service!',
+      'Their service is customized to the needs of every client, they go beyond assisting you with relative documentations. It includes timely updates on the progress of your journey to NZ not to mention the extended services they offer the moment you arrive to NZ.',
   },
   {
     id: 'sherine-marianne-gomez-ignacio',
@@ -76,17 +40,47 @@ export const testimonials: Testimonial[] = [
       'Secure visa consultancy is highly recommended to those who wants to study at NZ or Canada, why? Because it’s legit, very informative sila, updated, friendly, and all staff behind this consultancy maasahan at maasikasuhin sila. Love it.',
   },
   {
-    id: 'grace-pantisma',
-    name: 'Grace Pantisma',
-    photo: '121621447-10225351582043543-1679991506926286475-n.webp',
+    id: 'jesus-jay-vinluan',
+    name: 'Jesus Jay Vinluan',
+    photo: '231139566-10208785756116605-3331032055217870605-n.webp',
     quote:
-      'Their service is customized to the needs of every client, they go beyond assisting you with relative documentations. It includes timely updates on the progress of your journey to NZ not to mention the extended services they offer the moment you arrive to NZ.',
+      'The clarity call was very clear, understandable and enlightening. We’re so glad to start our future plans with Secure Visa. May Pag-asa sa Secure Visa!',
+  },
+  {
+    id: 'allan-de-guzman-santos',
+    name: 'Allan De Guzman Santos',
+    photo: '271996142-3086619211555200-7609655837062922218-n.webp',
+    quote: 'Their professionalism and commitment are impressive, they also make sure that they hear your concerns.',
+  },
+  {
+    id: 'elma-magsino-mendoza',
+    name: 'Elma Magsino Mendoza',
+    photo: '268283082-4937792192939952-4212081043654752730-n.webp',
+    quote: 'You will really feel in them that they won’t let you down. Thank you Secure Visa. God bless and keep safe!',
   },
   {
     id: 'angelica-rimas',
     name: 'Angelica Rimas',
     photo: '233228988-682506956479140-7700637224510137305-n.webp',
     quote: 'Yes! I definitely recommend Secure Visa for their professionalism. They are helpful.',
+  },
+  {
+    id: 'tinee-rodrigo',
+    name: 'Tinee Rodrigo',
+    photo: '269987839-10158410698276272-4308213972050667279-n.webp',
+    quote: 'Quality of service and hands on guidance.',
+  },
+  {
+    id: 'kay-montanez-banas',
+    name: 'Kay Montañez-Bañas',
+    photo: '247701045-4881622575190982-246891289864431232-n.webp',
+    quote: 'Best Valued Consulting Service!',
+  },
+  {
+    id: 'abi-gail',
+    name: 'Abi Gail',
+    photo: '215480157-4088013214581738-8880989863341671648-n.webp',
+    quote: 'Quality service. Security wise.',
   },
 ]
 

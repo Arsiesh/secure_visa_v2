@@ -5,7 +5,7 @@ import { brand } from './site'
 export const homeHero = {
   headline: brand.heroHeadline,
   lead: brand.tagline,
-  video: { label: 'Watch the free 40-min video', href: 'https://study.securevisa.com/nz' },
+  video: { label: 'Register for the free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
   videoNote: 'If you want to know how get your residence visa in New Zealand, click the button below.',
 } as const
 

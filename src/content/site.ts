@@ -91,9 +91,8 @@ export const legalLinks: { label: string; href: string }[] = [
 
 /** External funnel pages. All open in the same tab. */
 export const funnel = {
-  nzVideo: { label: 'Watch the free 40-min video', href: 'https://study.securevisa.com/nz' },
   video60: { label: 'Watch the free 60-min video', href: 'https://study.securevisa.com/now/' },
-  nzWebinar: { label: 'Register for the free NZ webinar', href: 'https://study.securevisa.com/nz-webinar/' },
+  nzWebinar: { label: 'Register for the free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
   canadaVideo: { label: 'Watch the free 60-min video', href: 'https://study.securevisa.com/CANADA-PR/' },
 } as const
 

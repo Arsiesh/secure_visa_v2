@@ -1,8 +1,10 @@
 import { useRef, useState, type FormEvent } from 'react'
+import { Check, Copy, Mail, Phone } from 'lucide-react'
 import clsx from 'clsx'
 import { CircleAlert } from 'lucide-react'
 import { inquiries } from '../../content/connect-extra'
 import { contact } from '../../content/site'
+import { composeInquiry, openMailto, submitInquiry, type SubmitResult } from './submitInquiry'
 
 export type FormValues = {
   name: string
@@ -29,19 +31,6 @@ function validate(v: FormValues): Errors {
   return errors
 }
 
-function buildMailto(v: FormValues) {
-  const inquiry = v.inquiry || 'Other inquiries'
-  const body = [
-    `Name: ${v.name.trim()}`,
-    `Email: ${v.email.trim()}`,
-    `Phone: ${v.phone.trim() || 'Not given'}`,
-    `Inquiry: ${inquiry}`,
-    '',
-    v.message.trim() || '(No message)',
-  ].join('\r\n')
-  return `mailto:${contact.email}?subject=${encodeURIComponent(`Website inquiry: ${inquiry}`)}&body=${encodeURIComponent(body)}`
-}
-
 const inputClass =
   'block min-h-12 w-full rounded-input border-2 border-line-strong bg-white px-4 py-2.5 text-ink hover:border-fern placeholder:text-ink-muted/70 aria-[invalid=true]:border-danger'
 
@@ -51,7 +40,8 @@ export function ContactForm({ initial }: { initial: FormValues }) {
   const [values, setValues] = useState<FormValues>(initial)
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({})
   const [submitted, setSubmitted] = useState(false)
-  const [sent, setSent] = useState(false)
+  const [result, setResult] = useState<SubmitResult | null>(null)
+  const [copied, setCopied] = useState('')
   const summaryRef = useRef<HTMLDivElement>(null)
   const confirmRef = useRef<HTMLDivElement>(null)
   const nameRef = useRef<HTMLInputElement>(null)
@@ -73,39 +63,96 @@ export function ContactForm({ initial }: { initial: FormValues }) {
       requestAnimationFrame(() => summaryRef.current?.focus())
       return
     }
-    setSent(true)
-    requestAnimationFrame(() => confirmRef.current?.focus())
-    window.location.assign(buildMailto(values))
+    void submitInquiry(values).then((r) => {
+      setResult(r)
+      requestAnimationFrame(() => confirmRef.current?.focus())
+    })
+  }
+
+  const copy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied('Copied')
+    } catch {
+      setCopied('Could not copy. Select the text and copy it by hand.')
+    }
   }
 
   const reset = () => {
     setValues({ name: '', email: '', phone: '', inquiry: '', message: '' })
     setTouched({})
     setSubmitted(false)
-    setSent(false)
+    setResult(null)
+    setCopied('')
     // The form re-mounts on this render; focus Name once it exists.
     requestAnimationFrame(() => nameRef.current?.focus())
   }
 
-  if (sent) {
+  if (result) {
+    const { subject, body } = composeInquiry(values)
+    const full = `To: ${contact.email}\nSubject: ${subject}\n\n${body.replace(/\r\n/g, '\n')}`
+    const link = 'font-semibold text-fern underline underline-offset-4'
+    const btn =
+      'inline-flex min-h-12 items-center justify-center gap-2 rounded-full border-2 border-fern px-6 py-2.5 font-semibold text-fern transition-colors hover:bg-fern hover:text-white'
     return (
-      <div ref={confirmRef} tabIndex={-1} role="status" className="rounded-card bg-mist p-6 sm:p-8">
-        <h2 className="font-display text-[clamp(1.5rem,2.6vw,2rem)]">Your message is ready to send</h2>
-        <p className="mt-4 max-w-[52ch] text-lg">
-          Your email app should open with your message ready to send. If it didn’t, email us at{' '}
-          <a href={contact.emailHref} className="font-semibold text-fern underline underline-offset-4">
-            {contact.email}
-          </a>{' '}
-          or call{' '}
-          <a href={contact.phoneHref} className="font-semibold text-fern underline underline-offset-4">
-            {contact.phone}
-          </a>
-          .
-        </p>
+      <div ref={confirmRef} tabIndex={-1} className="rounded-card bg-mist p-6 outline-none sm:p-8">
+        {result === 'sent' ? (
+          <>
+            <h2 className="font-display text-[clamp(1.5rem,2.6vw,2rem)]">Thanks, your message is on its way to our team.</h2>
+            <p className="mt-4 max-w-[52ch] text-lg">
+              If you would rather talk, call us on{' '}
+              <a href={contact.phoneHref} className={link}>
+                {contact.phone}
+              </a>
+              .
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="font-display text-[clamp(1.5rem,2.6vw,2rem)]">One more step: send it from your email app</h2>
+            <p className="mt-4 max-w-[52ch] text-lg">
+              We’ve opened your email app with your message filled in. Nothing reaches us until you tap Send there.
+            </p>
+            <label htmlFor="composed-message" className="mt-6 mb-1.5 block font-semibold">
+              Your message
+            </label>
+            <textarea
+              id="composed-message"
+              readOnly
+              rows={9}
+              value={full}
+              className="block w-full rounded-input border-2 border-line-strong bg-white px-4 py-3 text-base text-ink"
+            />
+            <div className="mt-4 flex flex-wrap gap-3">
+              <button type="button" onClick={() => copy(full)} className={btn}>
+                <Copy aria-hidden="true" className="size-5" />
+                Copy message
+              </button>
+              <button type="button" onClick={() => copy(contact.email)} className={btn}>
+                <Mail aria-hidden="true" className="size-5" />
+                Copy our email address
+              </button>
+            </div>
+            <p role="status" aria-live="polite" className="mt-3 flex min-h-6 items-center gap-1.5 font-medium text-fern">
+              {copied === 'Copied' ? <Check aria-hidden="true" className="size-4" /> : null}
+              {copied}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3 border-t border-line pt-6">
+              <a href={contact.phoneHref} className={btn}>
+                <Phone aria-hidden="true" className="size-5" />
+                Call us instead: {contact.phone}
+              </a>
+              <button type="button" onClick={() => openMailto(values)} className={btn}>
+                <Mail aria-hidden="true" className="size-5" />
+                Open email again
+              </button>
+            </div>
+          </>
+        )}
         <button
           type="button"
           onClick={reset}
-          className="mt-6 inline-flex min-h-12 items-center rounded-full border-2 border-fern px-6 py-2.5 font-semibold text-fern transition-colors hover:bg-fern hover:text-white"
+          className="mt-6 inline-flex min-h-12 items-center font-semibold text-fern underline underline-offset-4"
         >
           Start a new message
         </button>

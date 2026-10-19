@@ -7,6 +7,7 @@ import { FoundersStory } from '../components/home/FoundersStory'
 import { PodcastSection } from '../components/home/PodcastSection'
 import { ProcessPreview } from '../components/home/ProcessPreview'
 import { SituationSection } from '../components/home/SituationSection'
+import { VerifyStrip } from '../components/home/VerifyStrip'
 import { TrustSection } from '../components/home/TrustSection'
 import { brand, funnel } from '../content/site'
 
@@ -18,6 +19,7 @@ export default function HomePage() {
       <ArrivalsHero />
       <FindYourRoute />
       <FoundersStory />
+      <VerifyStrip />
       <SituationSection />
       <ProcessPreview />
       <ArrivalsWall />
@@ -25,8 +27,8 @@ export default function HomePage() {
       <TrustSection />
       <PodcastSection />
       <CtaBand
-        label="Watch the free 40-min NZ video"
-        href={funnel.nzVideo.href}
+        label={funnel.nzWebinar.label}
+        href={funnel.nzWebinar.href}
         secondary={{ label: 'Book a free assessment', href: '/connect/' }}
       />
     </>

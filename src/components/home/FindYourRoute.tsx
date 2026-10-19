@@ -1,9 +1,13 @@
 import { useId, useState, type ReactNode } from 'react'
 import { Plane } from 'lucide-react'
 import clsx from 'clsx'
+import { useReducedMotion } from 'motion/react'
 import { destinations } from '../../content/destinations'
+import { episodes } from '../../content/podcast'
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
+import { EpisodePlayButton } from '../player/EpisodePlayButton'
+import { RouteMap } from './RouteMap'
 import './board.css'
 
 type Dest = 'nz' | 'canada'
@@ -18,12 +22,26 @@ const PARTY_OPTIONS: { value: Party; label: string; pass: string }[] = [
   { value: 'partner', label: 'Me and my partner', pass: 'Me and my partner' },
   { value: 'family', label: 'My family', pass: 'My family' },
 ]
+const NURSE_EPISODE = episodes.find((e) => e.number === 11)!
+const NURSE_MINUTES = Math.round(NURSE_EPISODE.durationSeconds / 60)
 const CITY: Record<Dest, { code: string; city: string }> = {
   nz: { code: destinations.nz.airport, city: 'Auckland' },
   canada: { code: destinations.canada.airport, city: 'Toronto' },
 }
 
-function Chip({ name, value, checked, onChange, children }: { name: string; value: string; checked: boolean; onChange: () => void; children: ReactNode }) {
+function Chip({
+  name,
+  value,
+  checked,
+  onChange,
+  children,
+}: {
+  name: string
+  value: string
+  checked: boolean
+  onChange: () => void
+  children: ReactNode
+}) {
   return (
     <label className="relative cursor-pointer">
       <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="peer sr-only" />
@@ -39,7 +57,12 @@ function Field({ label, value, big = false, className }: { label: string; value:
   return (
     <div className={className}>
       <p className="font-board text-[0.8125rem] uppercase leading-none text-ink-muted">{label}</p>
-      <p className={clsx('font-board mt-1.5 uppercase leading-none text-kauri [perspective:400px]', big ? 'text-[2.75rem] sm:text-[3.5rem]' : 'text-[1.375rem] sm:text-[1.5rem]')}>
+      <p
+        className={clsx(
+          'font-board mt-1.5 uppercase leading-none text-kauri [perspective:400px]',
+          big ? 'text-[2.25rem] sm:text-[3.5rem]' : 'text-[1.25rem] sm:text-[1.375rem]',
+        )}
+      >
         <span key={value} className="pass-field-in">
           {value}
         </span>
@@ -61,7 +84,7 @@ function Barcode({ seed }: { seed: string }) {
     x += w + 1
   }
   return (
-    <svg viewBox="0 0 120 44" aria-hidden="true" className="h-12 w-full max-w-[9rem] text-kauri" preserveAspectRatio="none">
+    <svg viewBox="0 0 120 44" aria-hidden="true" className="h-9 w-full max-w-[9rem] text-kauri" preserveAspectRatio="none">
       {bars.map((b, i) => (
         <rect key={i} x={b.x} y="0" width={b.w} height="44" fill="currentColor" />
       ))}
@@ -71,13 +94,15 @@ function Barcode({ seed }: { seed: string }) {
 
 export function FindYourRoute() {
   const uid = useId()
+  const reduced = useReducedMotion() ?? false
   const [dest, setDest] = useState<Dest>('nz')
   const [party, setParty] = useState<Party>('family')
   const [nurse, setNurse] = useState(false)
+  /** Counts destination changes only. Zero means the default route is shown fully drawn and static. */
+  const [flights, setFlights] = useState(0)
 
   const isNurse = dest === 'nz' && nurse
   const to = CITY[dest]
-  const seat = party === 'family' ? 'Your family' : party === 'partner' ? 'You and partner' : 'Just you'
   const partyLabel = PARTY_OPTIONS.find((p) => p.value === party)!.pass
   const destination = destinations[dest]
   const params = new URLSearchParams({ destination: dest, party })
@@ -85,27 +110,29 @@ export function FindYourRoute() {
   const bookHref = `/connect/?${params.toString()}`
 
   return (
-    <section
-      id="find-your-route"
-      tabIndex={-1}
-      aria-labelledby="route-title"
-      className="bg-mist py-12 outline-none sm:py-14 lg:py-20"
-    >
-      <Container className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] xl:gap-x-16">
+    <section id="find-your-route" tabIndex={-1} aria-labelledby="route-title" className="bg-mist py-12 outline-none sm:py-14 lg:py-20">
+      <Container className="grid gap-x-12 gap-y-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-y-8 xl:gap-x-16">
         <div className="lg:col-start-1 lg:row-start-1">
-          <h2 id="route-title" className="font-display text-[clamp(2rem,4.2vw,3.5rem)]">
+          <h2 id="route-title" tabIndex={-1} className="font-display text-[clamp(2rem,4.2vw,3.5rem)] outline-none">
             Find your route
           </h2>
-          <p className="mt-4 max-w-[44ch] text-ink-muted">
-            Tell us where you want to go and who is coming. This is routing, not advice.
-          </p>
+          <p className="mt-4 max-w-[44ch] text-ink-muted">Tell us where you want to go and who is coming. This is routing, not advice.</p>
 
           <form className="mt-6 flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
             <fieldset>
               <legend className="mb-3 text-[1.25rem] font-semibold">Where to?</legend>
               <div className="flex flex-wrap gap-3">
                 {DEST_OPTIONS.map((o) => (
-                  <Chip key={o.value} name={`${uid}-dest`} value={o.value} checked={dest === o.value} onChange={() => setDest(o.value)}>
+                  <Chip
+                    key={o.value}
+                    name={`${uid}-dest`}
+                    value={o.value}
+                    checked={dest === o.value}
+                    onChange={() => {
+                      setDest(o.value)
+                      setFlights((n) => n + 1)
+                    }}
+                  >
                     {o.label}
                   </Chip>
                 ))}
@@ -121,23 +148,48 @@ export function FindYourRoute() {
                 ))}
               </div>
             </fieldset>
-            {dest === 'nz' ? (
-              <label className="flex max-w-[34rem] cursor-pointer items-start gap-4 rounded-card bg-white p-4">
-                <input
-                  type="checkbox"
-                  role="switch"
-                  checked={nurse}
-                  onChange={(e) => setNurse(e.target.checked)}
-                  className="peer sr-only"
-                />
-                <span
-                  aria-hidden="true"
-                  className="relative mt-0.5 h-7 w-12 shrink-0 rounded-full bg-ink-muted transition-colors after:absolute after:left-1 after:top-1 after:size-5 after:rounded-full after:bg-white after:transition-transform peer-checked:bg-fern peer-checked:after:translate-x-5 peer-focus-visible:outline-3 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-fern"
-                />
-                <span className="leading-snug">I’m a nurse and want to become a Registered Nurse in New Zealand</span>
-              </label>
-            ) : null}
+            {/* The slot is always rendered, so choosing Canada hides the toggle without moving anything below it. */}
+            <label
+              className={clsx(
+                'flex max-w-[34rem] cursor-pointer items-start gap-4 rounded-card bg-white p-4 transition-opacity duration-200',
+                dest !== 'nz' && 'invisible opacity-0',
+              )}
+            >
+              <input
+                type="checkbox"
+                role="switch"
+                checked={nurse}
+                disabled={dest !== 'nz'}
+                onChange={(e) => setNurse(e.target.checked)}
+                className="peer sr-only"
+              />
+              <span
+                aria-hidden="true"
+                className="relative mt-0.5 h-7 w-12 shrink-0 rounded-full bg-ink-muted transition-colors after:absolute after:left-1 after:top-1 after:size-5 after:rounded-full after:bg-white after:transition-transform peer-checked:bg-fern peer-checked:after:translate-x-5 peer-focus-visible:outline-3 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-fern"
+              />
+              <span className="leading-snug">I’m a nurse and want to become a Registered Nurse in New Zealand</span>
+            </label>
           </form>
+        </div>
+
+        <div className="flex flex-wrap items-start gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <div className="max-w-[22rem]">
+            <ButtonLink href={bookHref}>Book my free assessment</ButtonLink>
+            <p className="mt-2 text-[0.9375rem] leading-snug text-ink-muted">Free. We don’t charge you a fee just to speak to us.</p>
+          </div>
+          {isNurse ? (
+            <EpisodePlayButton
+              episode={NURSE_EPISODE}
+              label={`Listen: a nurse from the Philippines who became a resident in New Zealand (${NURSE_MINUTES} min)`}
+              activeLabel="Pause the nurse’s story"
+              variant="primary"
+              className="max-w-[24rem] border-2 border-fern bg-transparent! text-left text-fern! hover:bg-fern! hover:text-white!"
+            />
+          ) : (
+            <ButtonLink href={destination.path} variant="secondary">
+              Read about studying in {destination.name}
+            </ButtonLink>
+          )}
         </div>
 
         <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
@@ -145,49 +197,39 @@ export function FindYourRoute() {
             Boarding pass updated: Manila to {to.city}, {partyLabel}
             {isNurse ? ', Registered Nurse in New Zealand' : ''}
           </p>
-          <div className="relative flex flex-col rounded-card bg-white md:flex-row">
-            <div className="min-w-0 flex-1 p-6 sm:p-8 lg:p-10">
-              <div className="flex items-center justify-between border-b border-line pb-3">
-                <p className="font-board text-[0.9375rem] uppercase text-fern">Boarding pass</p>
-                <p className="font-board text-[0.9375rem] uppercase text-ink-muted">Secure Visa</p>
-              </div>
-              <div className="mt-5 flex items-center gap-4 sm:gap-8">
-                <div>
-                  <Field label="Manila" value="MNL" big />
+          <div className="relative rounded-card bg-white">
+            <RouteMap key={`${dest}-${flights}`} dest={dest} fly={flights > 0 && !reduced} />
+            <div className="flex flex-col md:flex-row">
+              <div className="min-w-0 flex-1 p-4 sm:p-6 lg:px-8 lg:py-6">
+                <div className="flex items-center justify-between border-b border-line pb-2.5">
+                  <p className="font-board text-[0.9375rem] uppercase text-fern">Boarding pass</p>
+                  <p className="font-board text-[0.9375rem] uppercase text-ink-muted">Secure Visa</p>
                 </div>
-                <Plane aria-hidden="true" className="size-7 shrink-0 text-fern sm:size-9" />
-                <Field label={to.city} value={to.code} big />
+                <div className="mt-3.5 flex items-center gap-4 sm:mt-4 sm:gap-8">
+                  <Field label="Manila" value="MNL" big />
+                  <Plane aria-hidden="true" className="size-7 shrink-0 text-fern sm:size-9" />
+                  <Field label={to.city} value={to.code} big />
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3.5 sm:gap-x-8">
+                  <Field label="Passenger" value={partyLabel} />
+                  <Field label="Pathway" value={isNurse ? 'Mapped in your free assessment' : 'Study → work → residence'} />
+                </div>
               </div>
-              <div className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-                <Field label="Passenger" value={partyLabel} />
-                <Field label="Pathway" value="Study → work → residence" />
-                {isNurse ? <Field label="Inquiry" value="Registered Nurse in New Zealand" className="sm:col-span-2" /> : null}
-                <Field label="Next gate" value="Free Accelerator Assessment" className="sm:col-span-2" />
+              {/* Perforated stub with notches */}
+              <div className="relative flex flex-col justify-between gap-4 border-t-2 border-dashed border-line p-4 md:w-44 md:border-l-2 md:border-t-0 md:p-5">
+                <span aria-hidden="true" className="absolute -left-3 -top-3 size-6 rounded-full bg-mist md:hidden" />
+                <span
+                  aria-hidden="true"
+                  className="absolute -right-3 -top-3 size-6 rounded-full bg-mist md:-bottom-3 md:left-[-0.75rem] md:right-auto md:top-auto"
+                />
+                <div className="grid w-full grid-cols-2 gap-x-4 gap-y-3.5 md:grid-cols-1">
+                  <Field label="Gate" value="Free assessment" />
+                  <Field label="Class" value="Student pathway" />
+                </div>
+                <Barcode seed={`${dest}-${party}-${isNurse}`} />
               </div>
-            </div>
-            {/* Perforated stub with notches */}
-            <div className="relative flex flex-col items-start justify-between gap-5 border-t-2 border-dashed border-line p-6 md:w-64 md:flex-col md:items-start md:justify-between md:gap-6 md:border-l-2 md:border-t-0 md:p-6 lg:w-72 lg:p-8">
-              <span aria-hidden="true" className="absolute -left-3 -top-3 size-6 rounded-full bg-mist" />
-              <span
-                aria-hidden="true"
-                className="absolute -right-3 -top-3 size-6 rounded-full bg-mist md:-bottom-3 md:left-[-0.75rem] md:right-auto md:top-auto"
-              />
-              <div className="grid w-full grid-cols-2 gap-x-4 gap-y-4 md:grid-cols-1">
-                <Field label="Route" value={`MNL ${to.code}`} />
-                <Field label="Gate" value="Free assessment" />
-                <Field label="Seat" value={seat} />
-                <Field label="Class" value="Student pathway" />
-              </div>
-              <Barcode seed={`${dest}-${party}-${isNurse}`} />
             </div>
           </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
-          <ButtonLink href={bookHref}>Book my free assessment</ButtonLink>
-          <ButtonLink href={destination.path} variant="secondary">
-            Read about studying in {destination.name}
-          </ButtonLink>
         </div>
       </Container>
     </section>

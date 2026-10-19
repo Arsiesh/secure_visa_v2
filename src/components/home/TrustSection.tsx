@@ -1,4 +1,4 @@
-import { icef, partners } from '../../content/site'
+import { partners } from '../../content/site'
 import { Container } from '../Container'
 import { FeaturedIn } from '../FeaturedIn'
 import { Img } from '../Img'
@@ -8,29 +8,8 @@ export function TrustSection() {
     <>
       <section aria-labelledby="trust-title" className="bg-mist py-16 sm:py-20 lg:py-28">
         <Container>
-          <div className="grid items-center gap-x-16 gap-y-8 lg:grid-cols-12">
-            <div className="lg:col-span-3">
-              <Img
-                name={icef.badge}
-                alt={icef.badgeAlt}
-                sizes="(min-width: 1024px) 240px, 160px"
-                className="h-auto w-40 lg:w-full lg:max-w-[15rem]"
-              />
-            </div>
-            <div className="lg:col-span-9">
-              <h2 id="trust-title" className="font-display text-[clamp(1.875rem,3.8vw,3.25rem)]">
-                {icef.heading}
-              </h2>
-              <div className="mt-6 flex max-w-[64ch] flex-col gap-4">
-                <p>{icef.paragraphs[0]}</p>
-                <p>{icef.paragraphs[1]}</p>
-                <p className="text-[1.25rem] font-semibold leading-snug">{icef.paragraphs[2]}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-16 lg:mt-24">
-            <h3 className="font-display text-[clamp(1.5rem,2.8vw,2.25rem)]">{partners.heading}</h3>
+          <div>
+            <h2 id="trust-title" className="font-display text-[clamp(1.875rem,3.8vw,3.25rem)]">{partners.heading}</h2>
             <p className="mt-4 max-w-[68ch] text-ink-muted">{partners.text}</p>
             <div
               role="region"

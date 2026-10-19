@@ -45,7 +45,7 @@ export const newZealand: Destination = {
     background: 'nz-section-1-background.webp',
     mobileImage: 'nz-mobile-section-image.webp',
     ctas: [
-      { label: 'Register for our free NZ webinar', href: 'https://study.securevisa.com/nz-webinar/' },
+      { label: 'Register for our free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
       { label: 'Watch the free video presentation', href: 'https://study.securevisa.com/now/' },
     ],
   },
@@ -77,7 +77,7 @@ export const newZealand: Destination = {
       'Remember, we’ve been through this process. We know how exciting it is but also how overwhelming it can get (not to mention the fear of being so far away from the rest of your family).',
       'When you work with us, you become part of our family. We then work with your family to help achieve your dream life.',
     ],
-    cta: { label: 'Register for our free NZ webinar', href: 'https://study.securevisa.com/nz-webinar/' },
+    cta: { label: 'Register for our free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
   },
   presentation: {
     lead: 'Attend our',
@@ -100,7 +100,7 @@ export const newZealand: Destination = {
     image: { src: 'canada-image-3.webp', alt: '' },
     sideImage: { src: 'canada-image-4.webp', alt: '' },
   },
-  finalCta: { label: 'Register for our free NZ webinar', href: 'https://study.securevisa.com/nz-webinar/' },
+  finalCta: { label: 'Register for our free NZ webinar', href: 'https://migrate.securevisa.com/nz-webinar' },
 }
 
 export const canada: Destination = {

@@ -369,9 +369,7 @@ export const platforms: PodcastPlatform[] = [
   { name: 'Apple Podcasts', logo: 'apple-colored.webp', href: 'https://podcasts.apple.com/us/podcast/the-secure-visa-podcast/id1585301991' },
   { name: 'Spotify', logo: 'spotify-colored-f1.webp', href: 'https://open.spotify.com/show/1w1VrgOWGQk5Avd9aS2TlC' },
   { name: 'Castro', logo: 'castro-colored.webp', href: 'https://castro.fm/podcast/a90f9fc0-4f9e-4dca-a646-cfcfe019abb4' },
-  { name: 'Castbox', logo: 'castbox-colored.webp', href: 'https://castbox.fm/channel/id4620709' },
-  { name: 'Google Podcasts', logo: 'google-colored.webp', href: 'https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8xODUxMTY2LnJzcw' },
-  { name: 'Podfriend', logo: 'podfriend-colored.webp', href: 'https://web.podfriend.com/podcast/1585301991' },
-  { name: 'Stitcher', logo: 'stitcher-colored-f2.webp', href: 'https://www.stitcher.com/show/the-secure-visa-podcast' },
+  { name: 'Castbox', logo: 'castbox-colored.webp', href: 'https://castbox.fm/channel/6859962' },
   { name: 'iHeartRadio', logo: 'iheart-colored.webp', href: 'https://www.iheart.com/podcast/269-the-secure-visa-podcast-88587897/' },
 ]
+// Removed on 2026-10-19 after a link check: Google Podcasts and Stitcher have shut down, and web.podfriend.com no longer resolves.

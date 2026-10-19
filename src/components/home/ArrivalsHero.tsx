@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useReducer, useRef, useState, useSyncExternalStore } from 'react'
 import { useReducedMotion } from 'motion/react'
-import { Pause, Play } from 'lucide-react'
+import { ExternalLink, Pause, Play } from 'lucide-react'
 import clsx from 'clsx'
 import { boardArrivals } from '../../content/arrivals'
-import { homeHero } from '../../content/home'
+import { heroLead, heroNzClaim } from '../../content/home-extra'
 import { brand, funnel, icef, partners } from '../../content/site'
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
@@ -16,6 +16,7 @@ const ADVANCE_MS = 6000
 /** The whole intro is one sequence: the last cell settles at about 1.7s. */
 const INTRO_MS = 1800
 const NAME_CELLS = 14
+const STATUS_CELLS = 8
 
 /** Short names that fit the 14-cell passenger column. Each is the name as written on the sign, shortened only by dropping a surname. */
 const BOARD_NAMES: Record<string, string> = {
@@ -38,7 +39,7 @@ const getWide = () => window.matchMedia('(min-width: 640px)').matches
 
 function useRowCount() {
   const wide = useSyncExternalStore(subscribeWide, getWide, () => true)
-  return wide ? 6 : 3
+  return wide ? 5 : 2
 }
 
 function useDocumentVisible() {
@@ -74,9 +75,9 @@ function pad(text: string, length: number) {
   return text.padEnd(length, ' ')
 }
 
-function CellRun({ text, row, offset, animate }: { text: string; row: number; offset: number; animate: boolean }) {
+function CellRun({ text, row, offset, animate, className }: { text: string; row: number; offset: number; animate: boolean; className?: string }) {
   return (
-    <span className="board-group">
+    <span className={clsx('board-group', className)}>
       {Array.from(text).map((ch, i) => (
         <SplitFlapCell
           key={i}
@@ -218,20 +219,40 @@ export function ArrivalsHero() {
                     >
                       <CellRun text={a.origin} row={r} offset={0} animate={animateIntro} />
                       <CellRun text={pad(BOARD_NAMES[a.id] ?? a.name.toUpperCase().slice(0, NAME_CELLS), NAME_CELLS)} row={r} offset={3} animate={animateIntro} />
-                      <CellRun text={a.status} row={r} offset={17} animate={animateIntro} />
+                      <CellRun text={pad(a.status, STATUS_CELLS)} row={r} offset={17} animate={animateIntro} />
                     </button>
                   </li>
                 ))}
               </ul>
+              <div className="mt-[0.35em] border-t border-dashed border-white/20 pt-[0.35em]">
+                <button
+                  type="button"
+                  aria-label="Your family: expected. Find your route"
+                  onClick={scrollToRoute}
+                  className="board-row board-row-family board-cols font-board w-full cursor-pointer rounded-[0.18em] py-[0.03em] text-left text-[1em]"
+                  style={{ display: 'grid' }}
+                >
+                  <CellRun text="MNL" row={rows.length} offset={0} animate={animateIntro} />
+                  <CellRun text={pad('YOUR FAMILY', NAME_CELLS)} row={rows.length} offset={3} animate={animateIntro} />
+                  <CellRun
+                    text="EXPECTED"
+                    row={rows.length}
+                    offset={17}
+                    animate={animateIntro}
+                    className={clsx('family-status', introDone && !reduced && 'family-status-blink')}
+                  />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="lg:col-start-1 lg:row-start-2 lg:self-start">
-          <p className="max-w-[46ch] text-[1.125rem] leading-relaxed text-white/90">{homeHero.lead}</p>
+          <p className="max-w-[46ch] text-[1.125rem] leading-relaxed text-white/90">{heroLead}</p>
           <div className="mt-5 flex flex-wrap gap-3 lg:mt-7">
-            <ButtonLink href={funnel.nzVideo.href} variant="onDark">
-              {funnel.nzVideo.label}
+            <ButtonLink href={funnel.nzWebinar.href} variant="onDark" icon={ExternalLink} iconPosition="end">
+              {funnel.nzWebinar.label}
+              <span className="sr-only"> (opens Secure Visa’s webinar page)</span>
             </ButtonLink>
             <ButtonLink href="#find-your-route" variant="ghost" onClick={scrollToRoute}>
               Find your route
@@ -250,6 +271,7 @@ export function ArrivalsHero() {
             <p className="sm:border-l sm:border-line-dark sm:pl-8">
               {partners.institutions} {partners.institutionsLabel}
             </p>
+            <p className="basis-full">{heroNzClaim}</p>
           </div>
         </div>
       </Container>
@@ -258,10 +280,10 @@ export function ArrivalsHero() {
 }
 
 /** Smooth scroll respects reduced motion through the global CSS rule. Falls back to the browser's anchor jump. */
-function scrollToRoute(event: React.MouseEvent<HTMLAnchorElement>) {
+function scrollToRoute(event: React.MouseEvent<HTMLElement>) {
   const el = document.getElementById('find-your-route')
   if (!el) return
   event.preventDefault()
   el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
-  el.focus({ preventScroll: true })
+  document.getElementById('route-title')?.focus({ preventScroll: true })
 }

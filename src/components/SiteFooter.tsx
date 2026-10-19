@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, Phone } from 'lucide-react'
+import { ExternalLink, Mail, Phone } from 'lucide-react'
 import { brand, contact, funnel, icef, legalLinks, nav, offices, socials, isNavGroup } from '../content/site'
 import { ButtonLink } from './ButtonLink'
 import { Container } from './Container'
@@ -29,8 +29,9 @@ export function SiteFooter() {
             <ButtonLink href="/connect/" variant="onDark">
               Book a free assessment
             </ButtonLink>
-            <ButtonLink href={funnel.nzVideo.href} variant="ghost">
-              {funnel.nzVideo.label}
+            <ButtonLink href={funnel.nzWebinar.href} variant="ghost" icon={ExternalLink} iconPosition="end">
+              {funnel.nzWebinar.label}
+              <span className="sr-only"> (opens Secure Visa’s webinar page)</span>
             </ButtonLink>
             <div className="mt-3 flex flex-col gap-0.5 lg:items-end">
               <a href={contact.emailHref} className="inline-flex min-h-11 items-center gap-3 text-lg font-medium">

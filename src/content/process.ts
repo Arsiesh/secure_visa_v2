@@ -87,5 +87,5 @@ export const processCta = {
   heading: 'Ready to see how we can make this proven process work for you and your family?',
   body: 'We invite you to join us for our free online presentation, where we break this process down in detail, share actual stories from students we’ve worked with, and help you decide whether working with us will help you and your family live your dream life.',
   label: 'Attend our free NZ webinar now',
-  href: 'https://study.securevisa.com/nz-webinar/',
+  href: 'https://migrate.securevisa.com/nz-webinar',
 } as const

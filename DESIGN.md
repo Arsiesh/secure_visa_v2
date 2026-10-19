@@ -50,6 +50,11 @@ Tailwind v4 exposes these as `bg-kauri`, `text-fern`, `border-line` and so on.
    - fade-and-slide-up on every section as it scrolls in
 2. **One accent per headline.** Do not colour or italicise a single word inside a headline.
 3. **Motion:** the only motion that runs on its own is the hero board's flip sequence. Everything else answers a user action (opening the menu, switching tabs or destinations, expanding an accordion, choosing a step). Respect `prefers-reduced-motion` in JS too (`useReducedMotion` from `motion/react`).
+   - **The journey vocabulary** (approved on the Claude Design canvas "Journey animation studies"):
+     - *Flight route:* choosing a destination draws a dashed flight path from MNL. A plane glides along it, the destination pops, and the status flips from "En route" to "Landed".
+     - *Through the gates:* scrolling the process moves a plane along the gate rail, and passed gates light up.
+     - Both are driven by the user (a choice, or scroll position). Never play them on load or on a timer.
+   - **Motion library:** it is loaded through `LazyMotion strict`, so use `m.div`, never `motion.div`. Animate only `transform`, `opacity`, `offset-distance` and `stroke-dashoffset`.
 4. **Copy fidelity.**
    - Use the client's real copy from `../content/pages/*.md` verbatim where it exists.
    - You may fix obvious typos ("Imigration", "Canda", "Percifrom"), convert ALL-CAPS CTAs to sentence case, and trim long walls of text by choosing the strongest sentences.
