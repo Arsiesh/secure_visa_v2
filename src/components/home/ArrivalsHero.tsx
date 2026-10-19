@@ -150,7 +150,6 @@ export function ArrivalsHero() {
                 key={previous.id}
                 name={previous.image}
                 alt=""
-                sizes="(min-width: 1024px) 640px, 100vw"
                 className="absolute inset-0 size-full object-cover object-[50%_30%]"
               />
             ) : null}
@@ -159,7 +158,6 @@ export function ArrivalsHero() {
               name={current.image}
               alt={current.alt}
               priority={cur === 0}
-              sizes="(min-width: 1024px) 640px, 100vw"
               className={clsx(
                 'absolute inset-0 size-full object-cover object-[50%_30%]',
                 previous !== current && 'board-photo-in',

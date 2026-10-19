@@ -21,7 +21,7 @@ export function VerifyStrip() {
       <Container>
         <div className="grid items-start gap-x-10 gap-y-6 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.2fr)]">
           <div className="flex items-center gap-4">
-            <Img name={icef.badge} alt={icef.badgeAlt} sizes="96px" className="h-auto w-20 shrink-0 sm:w-24" />
+            <Img name={icef.badge} alt={icef.badgeAlt} className="h-auto w-20 shrink-0 sm:w-24" />
             <div>
               <p className="text-[1.25rem] font-semibold leading-tight">ICEF accredited agency</p>
               <p className="mt-1 text-ink-muted">Agency #{icef.agencyNumber}</p>

@@ -133,7 +133,7 @@ function SignPanel({ step, active, last }: { step: ProcessStep; active: boolean;
         </div>
       </div>
       <div className="shrink-0 rounded-lg bg-paper p-1.5 sm:p-2.5">
-        <Img name={step.image} alt="" sizes="144px" className="block h-auto w-16 sm:w-28 lg:w-32" />
+        <Img name={step.image} alt="" className="block h-auto w-16 sm:w-28 lg:w-32" />
       </div>
     </div>
   )

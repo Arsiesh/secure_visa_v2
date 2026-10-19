@@ -32,7 +32,6 @@ export function PageHero({ title, intro, image, children }: PageHeroProps) {
               name={image.name}
               alt={image.alt}
               priority
-              sizes="(min-width: 1024px) 480px, 90vw"
               className={clsx('aspect-[4/5] w-full rounded-photo object-cover object-top', image.className)}
             />
           </div>

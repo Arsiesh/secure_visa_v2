@@ -22,7 +22,6 @@ export function TrustSection() {
                   key={tile}
                   name={tile}
                   alt=""
-                  sizes="3400px"
                   className="h-20 w-auto max-w-none [filter:contrast(1.3)_saturate(1.15)] sm:h-28 shrink-0 snap-start"
                 />
               ))}

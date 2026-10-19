@@ -28,7 +28,6 @@ export default function ProcessPage() {
               name="process-mobile-image.webp"
               alt="Jan and Aina Sacdalan smiling, holding a book"
               priority
-              sizes="(min-width: 1024px) 480px, 80vw"
               className="mx-auto -mt-4 block h-auto w-full max-w-sm lg:max-w-none"
             />
           </div>

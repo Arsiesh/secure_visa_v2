@@ -79,7 +79,6 @@ export function DestinationLinks() {
                   <Img
                     name={c.image}
                     alt={c.alt}
-                    sizes="(min-width: 1024px) 600px, 92vw"
                     className="aspect-[16/9] w-full origin-bottom-right scale-[2] object-cover object-right transition-transform duration-500 ease-out group-hover:scale-[2.06]"
                   />
                 </div>

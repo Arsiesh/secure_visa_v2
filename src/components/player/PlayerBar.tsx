@@ -80,7 +80,7 @@ export default function PlayerBar() {
           className="col-start-1 row-start-1 flex min-w-0 items-center gap-3 md:cursor-default"
           onClick={() => setExpanded((v) => !v)}
         >
-          <Img name={episode.thumbnail} alt="" sizes="48px" className="size-11 shrink-0 rounded-input object-cover md:size-12" />
+          <Img name={episode.thumbnail} alt="" className="size-11 shrink-0 rounded-input object-cover md:size-12" />
           <div className="min-w-0">
             <p className="flex items-baseline gap-2 text-sm leading-tight text-white/80">
               <span className="shrink-0">Episode {episode.number}</span>

@@ -37,7 +37,6 @@ export function StorySection({ dest, visual }: Props) {
             <Img
               name={photo.name}
               alt={photo.alt}
-              sizes="(min-width: 1024px) 480px, 90vw"
               className={`aspect-[4/5] w-full rounded-photo object-cover ${photo.className ?? ''}`}
             />
             {photo.caption ? <figcaption className="mt-3 text-[0.9375rem] text-ink-muted">{photo.caption}</figcaption> : null}

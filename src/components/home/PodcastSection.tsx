@@ -25,7 +25,7 @@ export function PodcastSection() {
         <ol className="flex flex-col gap-5 lg:col-span-7" aria-label="Latest episodes">
           {latest.map((e) => (
             <li key={e.number} className="grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-x-4 rounded-card bg-mist p-3 sm:grid-cols-[8.5rem_minmax(0,1fr)_auto] sm:gap-x-5">
-              <Img name={e.thumbnail} alt="" sizes="136px" className="row-span-2 aspect-square w-full rounded-[0.875rem] object-cover sm:row-span-1" />
+              <Img name={e.thumbnail} alt="" className="row-span-2 aspect-square w-full rounded-[0.875rem] object-cover sm:row-span-1" />
               <div className="min-w-0">
                 <p className="text-[0.9375rem] text-ink-muted">
                   Episode {e.number}

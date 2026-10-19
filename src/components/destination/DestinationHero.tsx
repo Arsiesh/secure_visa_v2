@@ -47,7 +47,6 @@ export function DestinationHero({ dest, visual }: Props) {
               name={visual.hero.name}
               alt=""
               priority
-              sizes="(min-width: 1024px) 700px, 90vw"
               className="absolute max-w-none"
               style={{
                 width: `${(meta.w / crop.w) * 100}%`,

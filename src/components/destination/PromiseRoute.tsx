@@ -41,7 +41,6 @@ export function PromiseRoute({ dest, visual }: Props) {
             <Img
               name={visual.promise.name}
               alt={visual.promise.alt}
-              sizes="(min-width: 1024px) 480px, 90vw"
               className="size-full origin-center scale-[1.22] object-cover object-[50%_45%]"
             />
           </div>

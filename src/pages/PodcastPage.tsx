@@ -33,7 +33,6 @@ export default function PodcastPage() {
               name={podcastIntro.phoneMockup}
               alt="A phone playing the Secure Visa podcast with Jan and Aina"
               priority
-              sizes="(min-width: 1024px) 460px, 70vw"
               className="mx-auto h-auto w-full max-w-[17rem] lg:max-w-[26rem]"
             />
           </div>

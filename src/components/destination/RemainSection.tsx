@@ -17,7 +17,6 @@ export function RemainSection({ dest, visual }: Props) {
             <Img
               name={visual.remain.name}
               alt={visual.remain.alt}
-              sizes="(min-width: 1024px) 480px, 80vw"
               className={`size-full object-cover ${visual.remain.className ?? ''}`}
             />
           </div>

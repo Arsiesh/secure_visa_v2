@@ -40,7 +40,6 @@ export function ReviewsWall({ reviews, onOpen }: ReviewsWallProps) {
               <Img
                 name={review.image}
                 alt={review.alt}
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 className="block h-auto w-full transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none"
               />
             </button>

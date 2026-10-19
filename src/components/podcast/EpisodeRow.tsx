@@ -53,7 +53,6 @@ export function EpisodeRow({ episode, featured = false }: EpisodeRowProps) {
         <Img
           name={episode.thumbnail}
           alt=""
-          sizes={featured ? '(min-width: 1024px) 416px, 96px' : '(min-width: 768px) 112px, 80px'}
           className={clsx(
             'aspect-square w-full object-cover',
             featured ? 'rounded-card lg:row-span-3 lg:rounded-photo' : 'rounded-input md:row-span-2 md:rounded-card',

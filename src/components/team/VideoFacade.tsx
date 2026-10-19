@@ -37,7 +37,7 @@ export function VideoFacade() {
           aria-label={`Play video: ${teamVideo.title}`}
           className="group absolute inset-0 block size-full focus-visible:outline-offset-[-6px] focus-visible:outline-signal"
         >
-          <Img name={teamVideo.thumbnail} alt="" className="size-full object-cover" sizes="(min-width: 1024px) 720px, 100vw" />
+          <Img name={teamVideo.thumbnail} alt="" className="size-full object-cover" />
           <span className="absolute inset-0 bg-kauri/25 transition-colors group-hover:bg-kauri/10" />
           <span className="absolute left-1/2 top-1/2 grid size-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-signal text-kauri transition-transform group-hover:scale-105 sm:size-24">
             <Play aria-hidden="true" className="ml-1 size-9 fill-current" />

@@ -61,7 +61,6 @@ export function CtaBand({
               <Img
                 name={closingCta.image}
                 alt={closingCta.imageAlt}
-                sizes="(min-width: 1024px) 480px, 60vw"
                 className="block h-auto max-h-[440px] w-full max-w-[20rem] object-contain lg:max-w-[22rem]"
               />
             </div>

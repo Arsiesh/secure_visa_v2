@@ -64,7 +64,6 @@ function Chapter({ chapter, flip }: ChapterProps) {
             <Img
               name={chapter.image.src}
               alt={IMAGE_ALT[chapter.id] ?? chapter.image.alt}
-              sizes="(min-width: 1024px) 420px, 80vw"
               className="mx-auto h-auto w-full max-w-sm"
             />
           </div>

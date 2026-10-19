@@ -19,13 +19,11 @@ export function FeaturedIn({ className }: FeaturedInProps) {
         <Img
           name={featuredIn.compact}
           alt=""
-          sizes="(min-width: 768px) 0px, 90vw"
           className={clsx('h-auto w-full max-w-md md:hidden', filter)}
         />
         <Img
           name={featuredIn.wide}
           alt=""
-          sizes="(min-width: 768px) 800px, 0px"
           className={clsx('hidden h-auto w-full max-w-4xl md:block', filter)}
         />
         <ul className="sr-only">

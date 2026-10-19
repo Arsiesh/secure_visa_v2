@@ -28,7 +28,6 @@ export default function TeamPage() {
             <Img
               name={founders.photo}
               alt={founders.alt}
-              sizes="(min-width: 1024px) 640px, 100vw"
               className="mx-auto h-auto w-full max-w-md lg:max-w-none"
             />
           </div>

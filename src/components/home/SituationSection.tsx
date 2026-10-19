@@ -63,7 +63,6 @@ export function SituationSection() {
           <Img
             name={homeSpecialists.image}
             alt="Aina and Jan Sacdalan with their daughter, with the Sky Tower of Auckland behind them"
-            sizes="(min-width: 1024px) 420px, 80vw"
             className="h-auto w-full max-w-[22rem] lg:max-w-[26rem]"
           />
         </div>

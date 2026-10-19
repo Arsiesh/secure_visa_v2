@@ -19,7 +19,6 @@ export function ArrivalsStrip({ photos, className }: Props) {
                 <Img
                   name={photo.name}
                   alt={photo.alt}
-                  sizes="(min-width: 768px) 360px, 45vw"
                   className={`aspect-[4/5] w-full rounded-photo object-cover ${photo.className ?? ''}`}
                 />
                 <figcaption className="mt-2 text-[0.9375rem] text-ink-muted">{photo.caption}</figcaption>

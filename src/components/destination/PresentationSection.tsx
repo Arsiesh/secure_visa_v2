@@ -34,7 +34,6 @@ export function PresentationSection({ dest, visual, className }: Props) {
           <Img
             name={visual.presentation.name}
             alt={visual.presentation.alt}
-            sizes="(min-width: 1024px) 480px, 90vw"
             className="mx-auto h-auto w-full max-w-md lg:max-w-none"
           />
         </div>

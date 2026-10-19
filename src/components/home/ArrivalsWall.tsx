@@ -50,7 +50,6 @@ export function ArrivalsWall() {
                 <Img
                   name={a.image}
                   alt={a.alt}
-                  sizes="(min-width: 768px) 40vw, 70vw"
                   className="absolute inset-0 size-full object-cover object-[50%_30%]"
                 />
                 </StampPress>

@@ -20,7 +20,6 @@ export function FoundersStory() {
             <Img
               name="home-hero-background.webp"
               alt="Jan and Aina with their daughter"
-              sizes="(min-width: 1024px) 800px, 90vw"
               className="absolute left-[-57.5%] top-[-13.3%] w-[170%] max-w-none"
             />
           </div>

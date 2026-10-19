@@ -22,7 +22,6 @@ export function TeamGrid() {
                   <Img
                     name={member.photo}
                     alt={member.alt}
-                    sizes="(min-width: 1024px) 300px, 45vw"
                     className="aspect-[4/5] w-full object-cover object-[50%_15%] transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </span>

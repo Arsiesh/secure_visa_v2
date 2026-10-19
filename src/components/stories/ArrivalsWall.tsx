@@ -49,11 +49,6 @@ export function ArrivalsWall({ photos, onOpen }: ArrivalsWallProps) {
                   <Img
                     name={photo.image}
                     alt={photo.alt}
-                    sizes={
-                      big
-                        ? "(min-width: 1024px) 34vw, 100vw"
-                        : "(min-width: 1024px) 17vw, 50vw"
-                    }
                     className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
                   />
                 </StampPress>

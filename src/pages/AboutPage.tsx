@@ -31,7 +31,6 @@ export default function AboutPage() {
               name="about-image-new-04.webp"
               alt="Aina and Jan Sacdalan, founders of Secure Visa, in a taped photo against the Secure Visa wall"
               priority
-              sizes="(min-width: 1024px) 50vw, 100vw"
               className="mx-auto -mt-12 h-auto lg:mt-0 w-full max-w-[28rem] sm:max-w-[34rem] lg:max-w-none lg:scale-110"
             />
           </div>
