@@ -1,0 +1,41 @@
+/* Arrival stamp, on the name pill. Armed by JS (data-stamp="armed"); without JS or with reduced motion it is simply there. */
+.sv-name { min-height: 1.75rem; }
+.sv-name:not([data-named]) { min-width: 2.375rem; }
+
+.sv-stamp {
+  position: absolute;
+  z-index: 1;
+  left: -0.25rem;
+  bottom: calc(100% - 4px);
+  width: 2.375rem;
+  aspect-ratio: 100 / 64;
+  pointer-events: none;
+  color: var(--color-signal, #f6c445);
+  opacity: 0.96;
+  transform: rotate(var(--stamp-rot, 0deg));
+  filter: url(#sv-ink) drop-shadow(0 0 1px rgba(15, 58, 39, 0.8));
+}
+.sv-name:not([data-named]) .sv-stamp { left: 0; bottom: 0; }
+@media (min-width: 640px) {
+  .sv-stamp { width: 2.75rem; }
+  .sv-name:not([data-named]) { min-width: 2.75rem; }
+}
+
+[data-stamp='armed'] .sv-stamp { opacity: 0; transform: scale(1.5) rotate(calc(var(--stamp-rot, 0deg) + 7deg)); }
+[data-stamp='done'] .sv-stamp { animation: sv-stamp-land 300ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+[data-stamp='done'] .sv-stamp-press { animation: sv-stamp-press 280ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both; }
+
+@keyframes sv-stamp-land {
+  0% { opacity: 0; transform: scale(1.5) rotate(calc(var(--stamp-rot, 0deg) + 7deg)); }
+  55% { opacity: 1; transform: scale(0.93) rotate(calc(var(--stamp-rot, 0deg) - 1deg)); }
+  100% { opacity: 0.96; transform: scale(1) rotate(var(--stamp-rot, 0deg)); }
+}
+@keyframes sv-stamp-press {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(0.985); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-stamp] .sv-stamp { animation: none !important; opacity: 0.96; transform: rotate(var(--stamp-rot, 0deg)); }
+  [data-stamp] .sv-stamp-press { animation: none !important; }
+}
+.sv-stamp-press { position: absolute; inset: 0; }

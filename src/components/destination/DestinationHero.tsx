@@ -40,8 +40,8 @@ export function DestinationHero({ dest, visual }: Props) {
         </div>
         <div className="lg:col-span-5">
           <div
-            className="relative mx-auto w-full max-w-md overflow-hidden rounded-photo lg:max-w-none"
-            style={{ aspectRatio: `${crop.w} / ${crop.h}` }}
+            className="vt-dest-photo relative mx-auto w-full max-w-md overflow-hidden rounded-photo lg:max-w-none"
+            style={{ aspectRatio: `${crop.w} / ${crop.h}`, viewTransitionName: `dest-photo-${dest.slug}` }}
           >
             <Img
               name={visual.hero.name}

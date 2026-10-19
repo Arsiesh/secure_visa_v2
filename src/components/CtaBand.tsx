@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import clsx from 'clsx'
 import { closingCta } from '../content/home'
@@ -16,6 +17,10 @@ type CtaBandProps = {
   /** Defaults to the client's closing copy. */
   heading?: string
   body?: readonly string[]
+  /** Optional slot between the body copy and the buttons. */
+  extra?: ReactNode
+  /** Look of the primary button. Defaults to the solid signal button. */
+  variant?: 'onDark' | 'ghost'
   className?: string
 }
 
@@ -27,6 +32,8 @@ export function CtaBand({
   secondary,
   heading = closingCta.heading,
   body = closingCta.body,
+  extra,
+  variant = 'onDark',
   className,
 }: CtaBandProps) {
   const headingId = useId()
@@ -46,8 +53,9 @@ export function CtaBand({
                   </p>
                 ))}
               </div>
+              {extra}
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href={href} variant="onDark" icon={icon}>
+                <ButtonLink href={href} variant={variant} icon={icon}>
                   {label}
                 </ButtonLink>
                 {secondary ? (

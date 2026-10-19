@@ -9,7 +9,8 @@ import { ProcessPreview } from '../components/home/ProcessPreview'
 import { SituationSection } from '../components/home/SituationSection'
 import { VerifyStrip } from '../components/home/VerifyStrip'
 import { TrustSection } from '../components/home/TrustSection'
-import { brand, funnel, headerCta } from '../content/site'
+import { NameBoard } from '../components/home/NameBoard'
+import { brand, funnel } from '../content/site'
 
 export default function HomePage() {
   return (
@@ -29,7 +30,8 @@ export default function HomePage() {
       <CtaBand
         label={funnel.nzWebinar.label}
         href={funnel.nzWebinar.href}
-        secondary={{ label: headerCta.label, href: headerCta.href }}
+        variant="ghost"
+        extra={<NameBoard />}
       />
     </>
   )

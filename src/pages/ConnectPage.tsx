@@ -1,6 +1,8 @@
 import { Mail, Phone } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
-import { ContactForm, type FormValues } from '../components/connect/ContactForm'
+import { useCallback, useState } from 'react'
+import { useLocation, useSearchParams } from 'react-router-dom'
+import { CheckInPass } from '../components/connect/CheckInPass'
+import { ContactForm, type FormSnapshot, type FormValues } from '../components/connect/ContactForm'
 import { ContactPanel } from '../components/connect/ContactPanel'
 import { ButtonLink } from '../components/ButtonLink'
 import { Container } from '../components/Container'
@@ -14,7 +16,15 @@ const PARTY_MESSAGE: Record<string, string> = {
   family: 'I’m planning to move with my family.',
 }
 
-function initialValues(params: URLSearchParams): FormValues {
+/** A name handed over from the home page in router state. Anything that is not a short string is ignored. */
+function nameFromState(state: unknown) {
+  const raw = (state as { name?: unknown } | null)?.name
+  if (typeof raw !== 'string') return ''
+  const name = raw.trim()
+  return name.length > 0 && name.length <= 60 ? name : ''
+}
+
+function initialValues(params: URLSearchParams, name: string): FormValues {
   const destination = params.get('destination')
   const party = params.get('party') ?? ''
   let inquiry = ''
@@ -23,7 +33,7 @@ function initialValues(params: URLSearchParams): FormValues {
   // The nurse pathway is a New Zealand one, so it never overrides an explicit Canada choice.
   if (params.get('nurse') === '1' && destination !== 'canada') inquiry = inquiries[2]
   const message = Object.hasOwn(PARTY_MESSAGE, party) ? PARTY_MESSAGE[party] : ''
-  return { name: '', email: '', phone: '', inquiry, message }
+  return { name, email: '', phone: '', inquiry, message }
 }
 
 const STEPS = [
@@ -36,8 +46,48 @@ function isAssessment(params: URLSearchParams) {
   return ['destination', 'party', 'nurse'].some((k) => params.has(k)) || params.get('intent') === 'assessment'
 }
 
+function FormAndPass({ initial, assessment }: { initial: FormValues; assessment: boolean }) {
+  const [snap, setSnap] = useState<FormSnapshot>({ values: initial, valid: false, result: null })
+  const onChange = useCallback((next: FormSnapshot) => setSnap(next), [])
+  const pass = (className?: string) => (
+    <CheckInPass
+      name={snap.values.name}
+      inquiry={snap.values.inquiry}
+      assessment={assessment}
+      valid={snap.valid}
+      result={snap.result}
+      className={className}
+    />
+  )
+  return (
+    <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div className="lg:col-span-7">
+        <div className="mb-8 rounded-card bg-mist p-4 lg:hidden">
+          <p className="mb-3 font-semibold">Prefer to talk?</p>
+          <div className="flex gap-3">
+            <ButtonLink href={contact.phoneHref} variant="secondary" icon={Phone} className="flex-1 !px-4">
+              Call
+            </ButtonLink>
+            <ButtonLink href={contact.emailHref} variant="secondary" icon={Mail} className="flex-1 !px-4">
+              Email
+            </ButtonLink>
+          </div>
+        </div>
+        <ContactForm initial={initial} onChange={onChange} />
+        {/* Below lg the pass only appears with the confirmation, so it never pushes the form down. */}
+        {snap.result ? <div className="mt-8 lg:hidden">{pass()}</div> : null}
+      </div>
+      <div className="lg:col-span-5">
+        <div className="hidden lg:mb-10 lg:block">{pass()}</div>
+        <ContactPanel />
+      </div>
+    </Container>
+  )
+}
+
 export default function ConnectPage() {
   const [params] = useSearchParams()
+  const { state } = useLocation()
   const assessment = isAssessment(params)
 
   return (
@@ -76,25 +126,7 @@ export default function ConnectPage() {
       </section>
 
       <section className="py-12 lg:py-20">
-        <Container className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <div className="mb-8 rounded-card bg-mist p-4 lg:hidden">
-              <p className="mb-3 font-semibold">Prefer to talk?</p>
-              <div className="flex gap-3">
-                <ButtonLink href={contact.phoneHref} variant="secondary" icon={Phone} className="flex-1 !px-4">
-                  Call
-                </ButtonLink>
-                <ButtonLink href={contact.emailHref} variant="secondary" icon={Mail} className="flex-1 !px-4">
-                  Email
-                </ButtonLink>
-              </div>
-            </div>
-            <ContactForm initial={initialValues(params)} />
-          </div>
-          <div className="lg:col-span-5">
-            <ContactPanel />
-          </div>
-        </Container>
+        <FormAndPass initial={initialValues(params, nameFromState(state))} assessment={assessment} />
       </section>
 
       <CtaBand label="Access the free presentation" href="https://migrate.securevisa.com/nz-webinar" />

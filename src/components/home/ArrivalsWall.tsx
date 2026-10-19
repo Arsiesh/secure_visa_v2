@@ -6,6 +6,8 @@ import { longTestimonials, perciQuote, testimonials } from '../../content/testim
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 import { Img } from '../Img'
+import { StampDefs, StampPress, StampedName } from '../stories/PassportStamp'
+import { useStampTile } from '../stories/useStampTile'
 import { TestimonialRail, type RailItem } from '../TestimonialRail'
 
 /** Varied sizes on purpose: a collage, not a grid. Spans are for a 6-column phone grid and a 12-column desktop grid. */
@@ -30,6 +32,7 @@ const RAIL: RailItem[] = [
 const letter = longTestimonials.find((t) => t.id === 'abi-admin-staff')!
 
 export function ArrivalsWall() {
+  const stampRef = useStampTile()
   return (
     <section aria-labelledby="wall-title" className="bg-mist py-16 sm:py-20 lg:py-28">
       <Container>
@@ -37,20 +40,21 @@ export function ArrivalsWall() {
           {homeProof.headingAlt}
         </h2>
 
+        <StampDefs />
         <ul className="mt-10 grid auto-rows-[9rem] grid-flow-dense grid-cols-6 gap-2.5 sm:auto-rows-[11rem] md:grid-cols-12 md:auto-rows-[9.5rem] md:gap-3 lg:auto-rows-[11rem]">
           {WALL.map(({ id, span }) => {
             const a = byId.get(id)!
             return (
-              <li key={id} className={clsx('relative overflow-hidden rounded-card bg-kauri-2', span)}>
+              <li key={id} ref={stampRef} className={clsx('relative overflow-hidden rounded-card bg-kauri-2', span)}>
+                <StampPress>
                 <Img
                   name={a.image}
                   alt={a.alt}
                   sizes="(min-width: 768px) 40vw, 70vw"
                   className="absolute inset-0 size-full object-cover object-[50%_30%]"
                 />
-                <p className="absolute bottom-2 left-2 max-w-[calc(100%-1rem)] rounded-full bg-kauri/85 px-3 py-1 text-[0.875rem] font-medium leading-snug text-white">
-                  {a.name}
-                </p>
+                </StampPress>
+                <StampedName id={id} name={a.name} truncate={false} pillClassName="px-3 py-1 text-[0.875rem] font-medium leading-snug" />
               </li>
             )
           })}

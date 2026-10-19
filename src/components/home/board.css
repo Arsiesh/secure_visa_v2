@@ -318,3 +318,71 @@
     opacity: 0;
   }
 }
+
+/* Name board (closing band): one row, sized from its own width. */
+.board.board-name {
+  font-size: min(1.6rem, calc((100cqw - 3rem) / 14.8));
+}
+.name-cols {
+  display: grid;
+  grid-template-columns:
+    calc(12 * var(--cw) + 11 * var(--cg))
+    calc(8 * var(--cw) + 7 * var(--cg));
+  column-gap: var(--colgap);
+  justify-content: center;
+}
+.board-row-static::after {
+  display: none;
+}
+.name-empty .flap-half {
+  color: color-mix(in oklab, var(--color-signal) 38%, transparent);
+}
+/* Small code board for the check-in pass: fixed size, not container-sized. */
+.board.board-code {
+  font-size: 1.75rem;
+  background: var(--color-kauri);
+}
+
+/* Check-in pass: printed name, one character at a time. */
+.pass-char {
+  display: inline-block;
+  white-space: pre;
+  animation: pass-char-in 240ms var(--ease-out-quart) both;
+}
+@keyframes pass-char-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Tear: only on a real send. Transform only. */
+.pass-stub {
+  transform-origin: 0 0;
+  transition: transform 600ms var(--ease-out-quart);
+}
+.pass-stub-torn {
+  transform: translate(0.25rem, 0.9rem) rotate(2.5deg);
+}
+
+/* Half-circle notch on the pass border: only the inside half shows, so the card edge reads as cut, not gapped. */
+.pass-notch {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-line);
+  background: var(--color-paper);
+  top: calc(-0.75rem - 1px);
+}
+.pass-notch-l {
+  left: calc(-0.75rem - 1px);
+  clip-path: inset(0 0 0 50%);
+}
+.pass-notch-r {
+  right: calc(-0.75rem - 1px);
+  clip-path: inset(0 50% 0 0);
+}

@@ -7,6 +7,7 @@ import { Equaliser } from '../player/Equaliser'
 import { EpisodePlayButton } from '../player/EpisodePlayButton'
 import { formatEpisodeDate, shortLength } from '../player/format'
 import { usePlayerState } from '../player/playerContext'
+import { ListenProgress } from './ListenProgress'
 
 const TOPIC_LABEL: Record<PodcastTopic, string> = { canada: 'Canada', 'new-zealand': 'New Zealand' }
 
@@ -82,6 +83,7 @@ export function EpisodeRow({ episode, featured = false }: EpisodeRowProps) {
           <p className="mt-2 flex flex-wrap gap-x-5 gap-y-0.5 text-[0.9375rem] text-ink-muted">
             <time dateTime={episode.date}>{formatEpisodeDate(episode.date)}</time>
             <span>{shortLength(episode.durationSeconds)}</span>
+            <ListenProgress episode={episode} />
           </p>
         </div>
 

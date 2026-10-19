@@ -36,7 +36,10 @@ const inputClass =
 
 const fieldOrder: FieldKey[] = ['name', 'email', 'phone']
 
-export function ContactForm({ initial }: { initial: FormValues }) {
+/** What the check-in pass needs to know. `valid` comes from this form's own validation. */
+export type FormSnapshot = { values: FormValues; valid: boolean; result: SubmitResult | null }
+
+export function ContactForm({ initial, onChange }: { initial: FormValues; onChange?: (snapshot: FormSnapshot) => void }) {
   const [values, setValues] = useState<FormValues>(initial)
   const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -50,6 +53,11 @@ export function ContactForm({ initial }: { initial: FormValues }) {
   const visible = (key: FieldKey) => (submitted || touched[key] ? errors[key] : undefined)
   const errorKeys = fieldOrder.filter((k) => errors[k])
   const showSummary = submitted && errorKeys.length > 0
+  const valid = errorKeys.length === 0
+
+  useEffect(() => {
+    onChange?.({ values, valid, result })
+  }, [onChange, values, valid, result])
 
   const set = (key: keyof FormValues) => (event: { target: { value: string } }) =>
     setValues((prev) => ({ ...prev, [key]: event.target.value }))

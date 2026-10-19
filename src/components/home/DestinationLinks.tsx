@@ -1,15 +1,59 @@
+import { useEffect, type MouseEvent } from 'react'
 import { ArrowUpRight, Plane } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { destinations, serviceCards } from '../../content/destinations'
 import { Container } from '../Container'
 import { Img } from '../Img'
+import { imageUrl } from '../../lib/imageUrl'
+import { visuals } from '../destination/visuals'
+
+// Same specifiers App.tsx uses, so Vite hands back the chunk that is already loading.
+const PAGE_CHUNK = {
+  nz: () => import('../../pages/NewZealandPage'),
+  canada: () => import('../../pages/CanadaPage'),
+} as const
+
+const warmed = new Set<string>()
+
+/** On intent (hover, focus, touch) fetch the page chunk and the hero photo, so the view transition's new snapshot is ready. */
+function warm(slug: 'nz' | 'canada') {
+  if (warmed.has(slug)) return
+  warmed.add(slug)
+  void PAGE_CHUNK[slug]().catch(() => warmed.delete(slug))
+  new Image().src = imageUrl(visuals[slug].hero.name)
+}
 
 const CARDS = [
   { ...serviceCards[0], image: 'nz-section-1-background.webp', alt: 'Auckland’s Sky Tower and harbour', dest: destinations.nz, city: 'Auckland' },
   { ...serviceCards[1], image: 'canada-banner.webp', alt: 'A lake and forested mountains in Canada', dest: destinations.canada, city: 'Toronto' },
 ] as const
 
+/**
+ * Names only the clicked card's photo so it can morph into the hero. Set on the DOM at click time: the router starts
+ * the transition right after this handler, before React would re-render. Modified or cancelled clicks are ignored.
+ */
+function nameChosenPhoto(e: MouseEvent<HTMLAnchorElement>, slug: 'nz' | 'canada') {
+  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+  const photo = e.currentTarget.querySelector<HTMLElement>('[data-vt-card]')
+  if (photo) photo.style.viewTransitionName = `dest-photo-${slug}`
+}
+
+function clearPhotoNames() {
+  document.querySelectorAll<HTMLElement>('[data-vt-card]').forEach((el) => {
+    el.style.viewTransitionName = ''
+  })
+}
+
 export function DestinationLinks() {
+  // A page restored from the back/forward cache must not keep a stale name.
+  useEffect(() => {
+    window.addEventListener('pageshow', clearPhotoNames)
+    return () => {
+      window.removeEventListener('pageshow', clearPhotoNames)
+      clearPhotoNames()
+    }
+  }, [])
+
   return (
     <section aria-labelledby="dest-title" className="bg-paper py-16 sm:py-20 lg:py-28">
       <Container>
@@ -21,9 +65,17 @@ export function DestinationLinks() {
             <li key={c.slug} className={i === 1 ? 'lg:mt-12' : ''}>
               <Link
                 to={c.href}
+                viewTransition
+                onPointerEnter={() => warm(c.dest.slug)}
+                onClick={(e) => nameChosenPhoto(e, c.dest.slug)}
+                onFocus={() => warm(c.dest.slug)}
+                onTouchStart={() => warm(c.dest.slug)}
                 className="group relative block rounded-card border border-line bg-white focus-visible:outline-offset-4"
               >
-                <div className="overflow-hidden rounded-t-[calc(1.25rem-1px)]">
+                <div
+                  data-vt-card
+                  className="vt-dest-photo overflow-hidden rounded-t-[calc(1.25rem-1px)]"
+                >
                   <Img
                     name={c.image}
                     alt={c.alt}

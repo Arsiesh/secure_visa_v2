@@ -79,13 +79,13 @@ export function SiteFooter() {
             <ul className="mt-4 grid grid-cols-2 gap-x-6">
               {footerLinks.map((link) => (
                 <li key={link.href}>
-                  <Link to={link.href} className={linkClass}>
+                  <Link to={link.href} viewTransition className={linkClass}>
                     {link.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link to="/connect/" className={linkClass}>
+                <Link to="/connect/" viewTransition className={linkClass}>
                   Contact us
                 </Link>
               </li>

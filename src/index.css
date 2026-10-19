@@ -117,3 +117,177 @@
     --header-h: 4.5rem;
   }
 }
+
+/* ---------- Page transitions (React Router `viewTransition`) ---------- */
+
+/* Things that stay put while the page underneath changes. */
+.vt-header {
+  view-transition-name: site-header;
+}
+[data-player-bar] {
+  view-transition-name: player-bar;
+}
+[data-mobile-cta] {
+  view-transition-name: mobile-cta;
+}
+.vt-dest-photo {
+  view-transition-class: dest-photo;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-settle-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+/* Fade-through: the old page is gone before the new one arrives, so the two never overlap at meaningful opacity. */
+::view-transition-group(root) {
+  animation-duration: 300ms;
+}
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+::view-transition-new(root) {
+  animation: vt-settle-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) 100ms both;
+}
+
+/* Header and bars: no cross-fade, no movement. Only the new snapshot is shown, in place. */
+::view-transition-group(site-header),
+::view-transition-group(player-bar),
+::view-transition-group(mobile-cta) {
+  animation: none;
+}
+/* The live header turns translucent (blur) once scrolled; snapshots can't blur, so back them with solid kauri. */
+::view-transition-image-pair(site-header) {
+  background: var(--color-kauri);
+}
+::view-transition-old(site-header),
+::view-transition-old(player-bar),
+::view-transition-old(mobile-cta),
+::view-transition-new(site-header),
+::view-transition-new(player-bar),
+::view-transition-new(mobile-cta) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Card photo -> hero photo: the group morphs size and position; both crops cover the box instead of stretching. */
+::view-transition-group(*.dest-photo) {
+  animation-duration: 480ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-image-pair(*.dest-photo) {
+  isolation: auto;
+}
+::view-transition-old(*.dest-photo),
+::view-transition-new(*.dest-photo) {
+  height: 100%;
+  object-fit: cover;
+  animation-duration: 480ms;
+  mix-blend-mode: normal;
+}
+
+/* The card you did not choose: leave quickly instead of lingering over the new page. */
+::view-transition-old(*.dest-photo):only-child {
+  animation-duration: 140ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ---------- Flight progress (destination pages) ---------- */
+/* A zero-height sticky strip: the kauri line continues the header, so it reads on dark and light sections alike. */
+.flight-progress {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  .flight-progress {
+    display: block;
+    position: sticky;
+    top: var(--header-h);
+    z-index: 51;
+    height: 0;
+    pointer-events: none;
+  }
+  .flight-progress__box {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+  }
+  .flight-progress__line {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--color-kauri);
+  }
+  .flight-progress__fill {
+    width: 100%;
+    height: 100%;
+    background: var(--color-signal);
+    transform-origin: left center;
+    animation: flight-fill linear both;
+    animation-timeline: scroll(root);
+  }
+  .flight-progress__gutter {
+    position: absolute;
+    inset: 0 0 auto 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+  .flight-progress__track {
+    position: relative;
+    container-type: inline-size;
+    height: 2px;
+  }
+  .flight-progress__plane {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    animation: flight-plane linear both;
+    animation-timeline: scroll(root);
+  }
+  .flight-progress__plane svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: var(--color-signal);
+    stroke: var(--color-kauri);
+    stroke-width: 1.75;
+    transform: rotate(45deg);
+  }
+  .flight-progress__code {
+    position: absolute;
+    top: 2px;
+    box-sizing: border-box;
+    height: 18px;
+    padding: 0 5px;
+    font-size: 11px;
+    line-height: 18px;
+    color: var(--color-signal);
+    background: var(--color-kauri);
+    border-radius: 0 0 4px 4px;
+  }
+  .flight-progress__code--from { left: 0; }
+  .flight-progress__code--to { right: 0; }
+  @keyframes flight-fill {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes flight-plane {
+    from { transform: translateX(36px); }
+    to { transform: translateX(calc(100cqw - 52px)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flight-progress__plane { display: none; }
+    .flight-progress__fill { animation-duration: auto !important; }
+  }
+}

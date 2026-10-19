@@ -53,6 +53,7 @@ export function NavDisclosure({ group, pathname, open, onToggle }: NavDisclosure
                 <li key={child.href}>
                   <NavLink
                     to={child.href}
+                    viewTransition
                     end
                     className={({ isActive }) =>
                       clsx(

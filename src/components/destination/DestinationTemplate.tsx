@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import type { Destination } from '../../content/destinations'
 import { CtaBand } from '../CtaBand'
 import { Container } from '../Container'
+import { FlightProgress } from '../FlightProgress'
 import { ArrivalsStrip } from './ArrivalsStrip'
 import { DestinationHero } from './DestinationHero'
 import { LettersSection } from './LettersSection'
@@ -22,6 +23,7 @@ export function DestinationTemplate({ dest, description }: Props) {
     <>
       <title>{`Emigrate to ${dest.name} | Secure Visa`}</title>
       <meta name="description" content={description} />
+      <FlightProgress to={dest.airport} />
       <DestinationHero dest={dest} visual={visual} />
       <StorySection dest={dest} visual={visual} />
       <PromiseRoute dest={dest} visual={visual} />

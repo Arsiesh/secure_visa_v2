@@ -18,12 +18,12 @@ export function SiteHeader() {
   return (
     <header
       className={clsx(
-        'on-dark sticky top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-300',
+        'on-dark vt-header sticky top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-300',
         scrolled ? 'border-line-dark bg-kauri/90 backdrop-blur-xl' : 'border-transparent bg-kauri',
       )}
     >
       <Container size="wide" className="flex h-16 items-center justify-between gap-6 lg:h-[4.5rem]">
-        <Link to="/" className="inline-flex min-h-11 shrink-0 items-center">
+        <Link to="/" viewTransition className="inline-flex min-h-11 shrink-0 items-center">
           <Img name={brand.logoHeader} alt="Secure Visa, home" className="h-8 w-auto lg:h-9" />
         </Link>
 

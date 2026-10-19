@@ -62,7 +62,7 @@ export function ButtonLink({
     )
   }
   return (
-    <Link to={href} className={classes} {...rest}>
+    <Link to={href} viewTransition className={classes} {...rest}>
       {content}
     </Link>
   )

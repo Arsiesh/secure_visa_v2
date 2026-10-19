@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 const POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 /** Time between flips of one cell. Each flip is a 60ms fall plus a 60ms settle. */
@@ -14,10 +14,14 @@ type Props = {
   flips: number
   /** Run the flip sequence on mount. Later changes to this prop are ignored on purpose. */
   animate: boolean
+  /** Opt-in: a later change to `char` runs a short flip (1-2 random characters, then the target). Off for the hero. */
+  flipOnChange?: boolean
+  /** With flipOnChange: swap instantly when the cell lands on a blank or dash, or leaves a dash. */
+  calmBlanks?: boolean
 }
 
 /** One character cell. Local state, so a flip re-renders this cell and nothing else. */
-export const SplitFlapCell = memo(function SplitFlapCell({ char, delay, flips, animate }: Props) {
+export const SplitFlapCell = memo(function SplitFlapCell({ char, delay, flips, animate, flipOnChange = false, calmBlanks = false }: Props) {
   const [s, setS] = useState<CellState>(() => ({ cur: animate && char !== ' ' ? ' ' : char, prev: ' ', n: 0 }))
 
   useEffect(() => {
@@ -33,6 +37,35 @@ export const SplitFlapCell = memo(function SplitFlapCell({ char, delay, flips, a
     // The sequence is a one-off on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Change mode. Only cells whose character changed run; a new change cancels this cell's pending flips.
+  const shown = useRef(char)
+  const changeTimers = useRef<number[]>([])
+  useEffect(() => {
+    if (!flipOnChange) return
+    if (shown.current === char) return
+    const prevChar = shown.current
+    shown.current = char
+    changeTimers.current.forEach(window.clearTimeout)
+    changeTimers.current = []
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      (calmBlanks && (char === ' ' || char === '-' || prevChar === '-'))
+    ) {
+      setS((p) => ({ cur: char, prev: p.cur, n: 0 }))
+      return
+    }
+    const seq: string[] = []
+    const count = 1 + Math.floor(Math.random() * 2)
+    for (let i = 0; i < count; i++) seq.push(POOL[Math.floor(Math.random() * POOL.length)])
+    seq.push(char)
+    seq.forEach((c, i) => {
+      changeTimers.current.push(
+        window.setTimeout(() => setS((p) => ({ cur: c, prev: p.cur, n: p.n + 1 })), i * FLIP_STEP),
+      )
+    })
+  }, [char, flipOnChange, calmBlanks])
+  useEffect(() => () => changeTimers.current.forEach(window.clearTimeout), [])
 
   const flipping = s.n > 0
   return (

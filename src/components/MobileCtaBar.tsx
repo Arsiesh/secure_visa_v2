@@ -83,6 +83,7 @@ export function MobileCtaBar() {
   return (
     <m.div
       ref={ref}
+      data-mobile-cta
       initial={false}
       animate={{ y: visible ? '0%' : '110%' }}
       transition={{ duration: 0.25, ease: 'easeOut' }}

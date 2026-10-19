@@ -2,6 +2,7 @@ import { Loader2, Pause, Play } from 'lucide-react'
 import clsx from 'clsx'
 import type { PodcastEpisode } from '../../content/podcast'
 import { preloadPlayerBar } from './playerBarLoader'
+import { PLAYED_MARGIN, RESUME_MIN, useSavedPosition } from '../podcast/savedPosition'
 import { usePlayerActions, usePlayerState } from './playerContext'
 
 type EpisodePlayButtonProps = {
@@ -27,7 +28,9 @@ export function EpisodePlayButton({ episode, label, activeLabel = 'Pause', varia
   const { play, toggle } = usePlayerActions()
   const isCurrent = current?.number === episode.number
   const active = isCurrent && (status === 'playing' || status === 'loading')
-  const verb = active ? 'Pause' : 'Play'
+  const saved = useSavedPosition(episode.number)
+  const canResume = !active && saved >= RESUME_MIN && saved < episode.durationSeconds - PLAYED_MARGIN
+  const verb = active ? 'Pause' : canResume ? 'Resume' : 'Play'
   // The name always starts with the visible text, so voice-control users can say what they see.
   const name = label
     ? `${active ? activeLabel : label}, Episode ${episode.number}: ${episode.title}`

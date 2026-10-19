@@ -53,8 +53,14 @@ Tailwind v4 exposes these as `bg-kauri`, `text-fern`, `border-line` and so on.
    - **The journey vocabulary** (approved on the Claude Design canvas "Journey animation studies"):
      - *Flight route:* choosing a destination draws a dashed flight path from MNL. A plane glides along it, the destination pops, and the status flips from "En route" to "Landed".
      - *Through the gates:* scrolling the process moves a plane along the gate rail, and passed gates light up.
-     - Both are driven by the user (a choice, or scroll position). Never play them on load or on a timer.
-   - **Motion library:** it is loaded through `LazyMotion strict`, so use `m.div`, never `motion.div`. Animate only `transform`, `opacity`, `offset-distance` and `stroke-dashoffset`.
+     - *Your name on the board:* in the home closing band, typing a first name flips it onto a split-flap row beside "EXPECTED". Book carries the name into Connect through router state, never the URL.
+     - *Check-in pass:* on Connect (lg and up), a boarding pass prints the form as it is filled. TO flips to AKL or YYZ, and STATUS moves from CHECK-IN OPEN to READY. It tears off only on a real `'sent'`, never on the mailto hand-off.
+     - *Arrival stamps:* the first time an arrival tile scrolls into view and its photo has loaded, an ARRIVED · AKL mini-stamp presses onto the name pill. Stamps never sit on faces or signs.
+     - *Departure transition:* tapping a destination card morphs its photo into that page's hero (View Transitions). Every other page change fades through, while the header, player bar and mobile CTA bar stay still.
+     - *Flight progress:* on the destination pages, a CSS scroll-driven line under the header flies a plane from MNL to AKL or YYZ. Without `animation-timeline` support, nothing is shown.
+     - *Listening progress:* a podcast row draws its saved position the first time it scrolls into view. Only the playing row subscribes to the player clock.
+     - All of these are driven by the user (a choice, typing, or scroll position). Never play them on load or on a timer.
+   - **Motion library:** it is loaded through `LazyMotion strict`, so use `m.div`, never `motion.div`. Animate only `transform`, `opacity`, `offset-distance`, `stroke-dashoffset` and `clip-path`. Prefer CSS (keyframes, scroll timelines, view transitions) where CSS can do the job.
 4. **Copy fidelity.**
    - Use the client's real copy from `../content/pages/*.md` verbatim where it exists.
    - You may fix obvious typos ("Imigration", "Canda", "Percifrom"), convert ALL-CAPS CTAs to sentence case, and trim long walls of text by choosing the strongest sentences.

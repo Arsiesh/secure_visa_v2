@@ -52,6 +52,7 @@ export function DesktopNav() {
             ) : (
               <NavLink
                 to={item.href}
+                viewTransition
                 end
                 className={({ isActive }) =>
                   clsx(
