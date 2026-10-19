@@ -3,6 +3,7 @@ import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom'
 import { LazyMotion, MotionConfig } from 'motion/react'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
+import { PlayerProvider } from '../components/player/PlayerProvider'
 
 const loadFeatures = () => import('../lib/motionFeatures').then((r) => r.default)
 
@@ -23,6 +24,7 @@ export function RootLayout() {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={loadFeatures} strict>
+      <PlayerProvider>
       <a
         href="#main"
         className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-signal px-5 py-3 font-semibold text-kauri transition-transform focus:translate-y-0 focus-visible:outline-kauri"
@@ -34,7 +36,10 @@ export function RootLayout() {
         <Outlet />
       </main>
       <SiteFooter />
+      {/* Leaves room under the footer for the docked podcast player; --player-h is only set while the bar is open. */}
+      <div aria-hidden="true" className="bg-kauri" style={{ height: 'var(--player-h, 0px)' }} />
       <ScrollRestoration />
+      </PlayerProvider>
       </LazyMotion>
     </MotionConfig>
   )

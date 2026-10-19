@@ -1,12 +1,11 @@
-import { ArrowUpRight } from 'lucide-react'
-import { ButtonLink } from '../components/ButtonLink'
 import { Container } from '../components/Container'
 import { CtaBand } from '../components/CtaBand'
 import { Img } from '../components/Img'
-import { EpisodeRow, FeaturedEpisode } from '../components/podcast/EpisodeList'
-import { episodes, platforms, podcastArchiveHref, podcastIntro } from '../content/podcast'
+import { EpisodeArchive } from '../components/podcast/EpisodeArchive'
+import { EpisodePlayButton } from '../components/player/EpisodePlayButton'
+import { episodes, platforms, podcastIntro, showDescription } from '../content/podcast'
 
-const [latest, ...earlier] = episodes
+const latest = episodes[0]
 
 export default function PodcastPage() {
   return (
@@ -19,6 +18,14 @@ export default function PodcastPage() {
           <div className="lg:col-span-7">
             <h1 className="font-display max-w-[14ch] text-[clamp(2.5rem,6vw,4.75rem)]">{podcastIntro.title}</h1>
             <p className="mt-6 max-w-[52ch] text-lg text-white/90 sm:text-xl">{podcastIntro.body}</p>
+            <div className="mt-8">
+              <EpisodePlayButton
+                episode={latest}
+                variant="onDark"
+                label="Play the latest episode"
+                activeLabel="Pause the latest episode"
+              />
+            </div>
           </div>
           <div className="lg:col-span-5">
             <Img
@@ -58,20 +65,11 @@ export default function PodcastPage() {
       <section aria-labelledby="episodes-heading" className="bg-paper">
         <Container className="py-16 lg:py-24">
           <h2 id="episodes-heading" className="font-display text-[clamp(1.875rem,4vw,3rem)]">
-            Latest episodes
+            All episodes
           </h2>
-          <div className="mt-8 lg:mt-12">
-            <FeaturedEpisode episode={latest} />
-          </div>
-          <ul className="mt-10 max-w-3xl divide-y divide-line border-t border-line">
-            {earlier.map((episode) => (
-              <EpisodeRow key={episode.number} episode={episode} />
-            ))}
-          </ul>
-          <div className="mt-8">
-            <ButtonLink href={podcastArchiveHref} newTab variant="secondary" icon={ArrowUpRight} iconPosition="end">
-              See every episode
-            </ButtonLink>
+          <p className="mt-4 max-w-[68ch] text-pretty">{showDescription}</p>
+          <div className="mt-10">
+            <EpisodeArchive />
           </div>
         </Container>
       </section>

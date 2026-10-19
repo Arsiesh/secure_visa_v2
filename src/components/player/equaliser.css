@@ -1,0 +1,11 @@
+@keyframes sv-eq {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+.sv-eq > span {
+  transform-origin: bottom;
+  animation: sv-eq 0.9s ease-in-out infinite;
+}
+.sv-eq > span:nth-child(2) { animation-delay: -0.35s; animation-duration: 0.75s; }
+.sv-eq > span:nth-child(3) { animation-delay: -0.6s; animation-duration: 1.05s; }

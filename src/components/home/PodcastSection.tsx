@@ -3,6 +3,8 @@ import { episodes, platforms } from '../../content/podcast'
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 import { Img } from '../Img'
+import { EpisodePlayButton } from '../player/EpisodePlayButton'
+import { formatEpisodeDate } from '../player/format'
 
 const latest = episodes.slice(0, 3)
 
@@ -21,17 +23,18 @@ export function PodcastSection() {
         </div>
         <ol className="flex flex-col gap-5 lg:col-span-7" aria-label="Latest episodes">
           {latest.map((e) => (
-            <li key={e.number}>
-              <a
-                href={e.href}
-                className="group grid grid-cols-[6.5rem_1fr] items-center gap-5 rounded-card bg-mist p-3 transition-colors hover:bg-[color-mix(in_oklab,var(--color-mist)_80%,var(--color-fern))] sm:grid-cols-[8.5rem_1fr]"
-              >
-                <Img name={e.thumbnail} alt="" sizes="136px" className="aspect-square w-full rounded-[0.875rem] object-cover" />
-                <span className="pr-2">
-                  <span className="block text-[0.9375rem] text-ink-muted">Episode {e.number}</span>
-                  <span className="mt-1 block text-[1.125rem] font-semibold leading-snug group-hover:underline">{e.title}</span>
-                </span>
-              </a>
+            <li key={e.number} className="grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-x-4 rounded-card bg-mist p-3 sm:grid-cols-[8.5rem_minmax(0,1fr)_auto] sm:gap-x-5">
+              <Img name={e.thumbnail} alt="" sizes="136px" className="row-span-2 aspect-square w-full rounded-[0.875rem] object-cover sm:row-span-1" />
+              <div className="min-w-0">
+                <p className="text-[0.9375rem] text-ink-muted">
+                  Episode {e.number}
+                  <time dateTime={e.date} className="ml-3">
+                    {formatEpisodeDate(e.date)}
+                  </time>
+                </p>
+                <p className="mt-1 text-[1.125rem] font-semibold leading-snug">{e.title}</p>
+              </div>
+              <EpisodePlayButton episode={e} variant="icon" className="col-start-2 mt-3 justify-self-start sm:col-start-3 sm:row-start-1 sm:mt-0 sm:mr-1 sm:justify-self-auto" />
             </li>
           ))}
         </ol>
