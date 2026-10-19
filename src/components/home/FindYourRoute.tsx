@@ -1,0 +1,195 @@
+import { useId, useState, type ReactNode } from 'react'
+import { Plane } from 'lucide-react'
+import clsx from 'clsx'
+import { destinations } from '../../content/destinations'
+import { ButtonLink } from '../ButtonLink'
+import { Container } from '../Container'
+import './board.css'
+
+type Dest = 'nz' | 'canada'
+type Party = 'solo' | 'partner' | 'family'
+
+const DEST_OPTIONS: { value: Dest; label: string }[] = [
+  { value: 'nz', label: 'New Zealand' },
+  { value: 'canada', label: 'Canada' },
+]
+const PARTY_OPTIONS: { value: Party; label: string; pass: string }[] = [
+  { value: 'solo', label: 'Just me', pass: 'Just me' },
+  { value: 'partner', label: 'Me and my partner', pass: 'Me and my partner' },
+  { value: 'family', label: 'My family', pass: 'My family' },
+]
+const CITY: Record<Dest, { code: string; city: string }> = {
+  nz: { code: destinations.nz.airport, city: 'Auckland' },
+  canada: { code: destinations.canada.airport, city: 'Toronto' },
+}
+
+function Chip({ name, value, checked, onChange, children }: { name: string; value: string; checked: boolean; onChange: () => void; children: ReactNode }) {
+  return (
+    <label className="relative cursor-pointer">
+      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="peer sr-only" />
+      <span className="inline-flex min-h-12 items-center rounded-full border-2 border-fern bg-white px-5 text-[1.0625rem] font-semibold text-fern transition-colors peer-checked:bg-fern peer-checked:text-white peer-hover:bg-mist peer-checked:peer-hover:bg-fern-dark peer-focus-visible:outline-3 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-fern">
+        {children}
+      </span>
+    </label>
+  )
+}
+
+/** A value on the pass. Keyed by its text, so only the field that changed remounts and plays the flip. */
+function Field({ label, value, big = false, className }: { label: string; value: string; big?: boolean; className?: string }) {
+  return (
+    <div className={className}>
+      <p className="font-board text-[0.8125rem] uppercase leading-none text-ink-muted">{label}</p>
+      <p className={clsx('font-board mt-1.5 uppercase leading-none text-kauri [perspective:400px]', big ? 'text-[2.75rem] sm:text-[3.5rem]' : 'text-[1.375rem] sm:text-[1.5rem]')}>
+        <span key={value} className="pass-field-in">
+          {value}
+        </span>
+      </p>
+    </div>
+  )
+}
+
+/** Barcode-like stub, drawn as SVG bars. The bar pattern is derived from the choices, so it changes with the pass. */
+function Barcode({ seed }: { seed: string }) {
+  let h = 2166136261
+  for (let i = 0; i < seed.length; i++) h = Math.imul(h ^ seed.charCodeAt(i), 16777619)
+  const bars: { x: number; w: number }[] = []
+  let x = 0
+  for (let i = 0; i < 34 && x < 118; i++) {
+    h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0
+    const w = 1 + (h % 4)
+    if (i % 2 === 0) bars.push({ x, w })
+    x += w + 1
+  }
+  return (
+    <svg viewBox="0 0 120 44" aria-hidden="true" className="h-12 w-full max-w-[9rem] text-kauri" preserveAspectRatio="none">
+      {bars.map((b, i) => (
+        <rect key={i} x={b.x} y="0" width={b.w} height="44" fill="currentColor" />
+      ))}
+    </svg>
+  )
+}
+
+export function FindYourRoute() {
+  const uid = useId()
+  const [dest, setDest] = useState<Dest>('nz')
+  const [party, setParty] = useState<Party>('family')
+  const [nurse, setNurse] = useState(false)
+
+  const isNurse = dest === 'nz' && nurse
+  const to = CITY[dest]
+  const seat = party === 'family' ? 'Your family' : party === 'partner' ? 'You and partner' : 'Just you'
+  const partyLabel = PARTY_OPTIONS.find((p) => p.value === party)!.pass
+  const destination = destinations[dest]
+  const params = new URLSearchParams({ destination: dest, party })
+  if (isNurse) params.set('nurse', '1')
+  const bookHref = `/connect/?${params.toString()}`
+
+  return (
+    <section
+      id="find-your-route"
+      tabIndex={-1}
+      aria-labelledby="route-title"
+      className="bg-mist py-12 outline-none sm:py-14 lg:py-20"
+    >
+      <Container className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] xl:gap-x-16">
+        <div className="lg:col-start-1 lg:row-start-1">
+          <h2 id="route-title" className="font-display text-[clamp(2rem,4.2vw,3.5rem)]">
+            Find your route
+          </h2>
+          <p className="mt-4 max-w-[44ch] text-ink-muted">
+            Tell us where you want to go and who is coming. This is routing, not advice.
+          </p>
+
+          <form className="mt-6 flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+            <fieldset>
+              <legend className="mb-3 text-[1.25rem] font-semibold">Where to?</legend>
+              <div className="flex flex-wrap gap-3">
+                {DEST_OPTIONS.map((o) => (
+                  <Chip key={o.value} name={`${uid}-dest`} value={o.value} checked={dest === o.value} onChange={() => setDest(o.value)}>
+                    {o.label}
+                  </Chip>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend className="mb-3 text-[1.25rem] font-semibold">Who’s coming?</legend>
+              <div className="flex flex-wrap gap-3">
+                {PARTY_OPTIONS.map((o) => (
+                  <Chip key={o.value} name={`${uid}-party`} value={o.value} checked={party === o.value} onChange={() => setParty(o.value)}>
+                    {o.label}
+                  </Chip>
+                ))}
+              </div>
+            </fieldset>
+            {dest === 'nz' ? (
+              <label className="flex max-w-[34rem] cursor-pointer items-start gap-4 rounded-card bg-white p-4">
+                <input
+                  type="checkbox"
+                  role="switch"
+                  checked={nurse}
+                  onChange={(e) => setNurse(e.target.checked)}
+                  className="peer sr-only"
+                />
+                <span
+                  aria-hidden="true"
+                  className="relative mt-0.5 h-7 w-12 shrink-0 rounded-full bg-ink-muted transition-colors after:absolute after:left-1 after:top-1 after:size-5 after:rounded-full after:bg-white after:transition-transform peer-checked:bg-fern peer-checked:after:translate-x-5 peer-focus-visible:outline-3 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-fern"
+                />
+                <span className="leading-snug">I’m a nurse and want to become a Registered Nurse in New Zealand</span>
+              </label>
+            ) : null}
+          </form>
+        </div>
+
+        <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+          <p className="sr-only" role="status">
+            Boarding pass updated: Manila to {to.city}, {partyLabel}
+            {isNurse ? ', Registered Nurse in New Zealand' : ''}
+          </p>
+          <div className="relative flex flex-col rounded-card bg-white md:flex-row">
+            <div className="min-w-0 flex-1 p-6 sm:p-8 lg:p-10">
+              <div className="flex items-center justify-between border-b border-line pb-3">
+                <p className="font-board text-[0.9375rem] uppercase text-fern">Boarding pass</p>
+                <p className="font-board text-[0.9375rem] uppercase text-ink-muted">Secure Visa</p>
+              </div>
+              <div className="mt-5 flex items-center gap-4 sm:gap-8">
+                <div>
+                  <Field label="Manila" value="MNL" big />
+                </div>
+                <Plane aria-hidden="true" className="size-7 shrink-0 text-fern sm:size-9" />
+                <Field label={to.city} value={to.code} big />
+              </div>
+              <div className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                <Field label="Passenger" value={partyLabel} />
+                <Field label="Pathway" value="Study → work → residence" />
+                {isNurse ? <Field label="Inquiry" value="Registered Nurse in New Zealand" className="sm:col-span-2" /> : null}
+                <Field label="Next gate" value="Free Accelerator Assessment" className="sm:col-span-2" />
+              </div>
+            </div>
+            {/* Perforated stub with notches */}
+            <div className="relative flex flex-col items-start justify-between gap-5 border-t-2 border-dashed border-line p-6 md:w-64 md:flex-col md:items-start md:justify-between md:gap-6 md:border-l-2 md:border-t-0 md:p-6 lg:w-72 lg:p-8">
+              <span aria-hidden="true" className="absolute -left-3 -top-3 size-6 rounded-full bg-mist" />
+              <span
+                aria-hidden="true"
+                className="absolute -right-3 -top-3 size-6 rounded-full bg-mist md:-bottom-3 md:left-[-0.75rem] md:right-auto md:top-auto"
+              />
+              <div className="grid w-full grid-cols-2 gap-x-4 gap-y-4 md:grid-cols-1">
+                <Field label="Route" value={`MNL ${to.code}`} />
+                <Field label="Gate" value="Free assessment" />
+                <Field label="Seat" value={seat} />
+                <Field label="Class" value="Student pathway" />
+              </div>
+              <Barcode seed={`${dest}-${party}-${isNurse}`} />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <ButtonLink href={bookHref}>Book my free assessment</ButtonLink>
+          <ButtonLink href={destination.path} variant="secondary">
+            Read about studying in {destination.name}
+          </ButtonLink>
+        </div>
+      </Container>
+    </section>
+  )
+}

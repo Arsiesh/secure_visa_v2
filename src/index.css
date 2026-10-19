@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@import "@fontsource-variable/archivo/wdth.css";
+
+/*
+  Secure Visa design tokens. See DESIGN.md for the reasoning behind each choice.
+  Colour names come from New Zealand/Philippine plants so they read as one family.
+*/
+@theme {
+  /* Palette */
+  --color-kauri: #0f3a27;        /* deepest brand green: hero, board, footer */
+  --color-kauri-2: #164a33;      /* raised surface on kauri */
+  --color-fern: #2b7a4b;         /* brand green: primary buttons, links on light (5.3:1 on white) */
+  --color-fern-dark: #22633c;    /* hover/pressed fern */
+  --color-kawakawa: #86c84a;     /* lime from the brand blobs: accents on dark only */
+  --color-signal: #f6c445;       /* airport wayfinding yellow: board characters, gate tags, on dark only */
+  --color-mist: #eef3ef;         /* alternate light section */
+  --color-paper: #ffffff;
+  --color-ink: #0c2419;          /* body text on light */
+  --color-ink-muted: #46594f;    /* secondary text on light (7:1 on white) */
+  --color-line: #d3ded6;         /* decorative hairlines on light */
+  --color-line-strong: #7d8f85;  /* input, chip and control borders on light (3.4:1 on white) */
+  --color-line-dark: #2a5a42;    /* hairlines on kauri */
+  --color-danger: #b42318;
+
+  /* Type */
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Radii: hierarchy, not one radius everywhere */
+  --radius-input: 0.5rem;
+  --radius-card: 1.25rem;
+  --radius-photo: 1.75rem;
+
+  /* Motion */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-stretch: 100%;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-kawakawa);
+    color: var(--color-kauri);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-fern);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-signal);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+  Width-axis type roles. Archivo's wdth axis gives one family three voices:
+  expanded display (echoes the wide-tracked logo), normal body, condensed board/wayfinding.
+*/
+@utility font-display {
+  font-stretch: 118%;
+  font-weight: 760;
+  letter-spacing: -0.012em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+@utility font-board {
+  font-stretch: 72%;
+  font-weight: 640;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility font-body {
+  font-stretch: 100%;
+  font-weight: 400;
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+/* Shared layout measure: the sticky header height, for sticky sub-navs and anchor offsets. */
+:root {
+  --header-h: 4rem;
+}
+@media (min-width: 64rem) {
+  :root {
+    --header-h: 4.5rem;
+  }
+}
