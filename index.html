@@ -15,11 +15,11 @@
     <meta property="og:title" content="Secure Visa — Study your way to residency in New Zealand and Canada" />
     <script>
       // Home only: start fetching the hero photo (first board arrival) before the JS bundle has run.
-      if (location.pathname === '/') {
+      if (location.pathname === '%BASE_URL%') {
         var l = document.createElement('link')
         l.rel = 'preload'
         l.as = 'image'
-        l.href = '/images/testimonial-raz-family-scaled.webp'
+        l.href = '%BASE_URL%images/testimonial-raz-family-scaled.webp'
         l.type = 'image/webp'
         l.fetchPriority = 'high'
         document.head.appendChild(l)

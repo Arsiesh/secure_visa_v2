@@ -2,6 +2,7 @@ import { useEffect, useRef, type PointerEvent } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { imageMeta } from '../../content/imageMeta'
 import { useScrollLock } from '../../hooks/useScrollLock'
+import { imageUrl } from '../../lib/imageUrl'
 
 export type LightboxItem = { image: string; alt: string; caption?: string }
 
@@ -39,7 +40,7 @@ export function Lightbox({ items, index, onIndexChange, onClose }: LightboxProps
     if (index === null) return
     for (const offset of [-1, 1]) {
       const item = items[(index + offset + items.length) % items.length]
-      if (item) new Image().src = `/images/${item.image}`
+      if (item) new Image().src = imageUrl(item.image)
     }
   }, [index, items])
 
@@ -106,7 +107,7 @@ export function Lightbox({ items, index, onIndexChange, onClose }: LightboxProps
           >
             <img
               key={item.image}
-              src={`/images/${item.image}`}
+              src={imageUrl(item.image)}
               alt={item.alt}
               width={meta?.w}
               height={meta?.h}

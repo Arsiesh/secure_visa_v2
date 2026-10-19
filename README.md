@@ -1,5 +1,7 @@
 # Secure Visa — 2026 redesign
 
+**Live:** https://arsiesh.github.io/secure_visa_v2/
+
 A React redesign of [securevisa.com](https://www.securevisa.com/), built with the client's real copy and photography. The design direction, tokens and rules are in [DESIGN.md](./DESIGN.md). Read it before changing any UI.
 
 ## Run it
@@ -31,3 +33,7 @@ Vite 8, React 19, TypeScript, Tailwind CSS v4 (tokens in `src/index.css`), Motio
 
 - The contact form has no backend. It validates, then opens the visitor's email app with the message pre-filled to info@securevisa.com.
 - The home hero's first photo is preloaded from `index.html`. Update that filename if the first entry in `boardArrivals` changes.
+
+## Deploy
+
+Every push to `main` runs `.github/workflows/deploy.yml`, which builds with `BASE_PATH=/<repo name>/` and publishes to GitHub Pages. To deploy to a host that serves from the root (Vercel, Netlify), build without `BASE_PATH` and add a rewrite of all paths to `/index.html`.

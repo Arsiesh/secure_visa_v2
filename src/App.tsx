@@ -29,7 +29,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-])
+], {
+  // Matches Vite's base path, so routes resolve under /secure_visa_v2/ on GitHub Pages.
+  basename: import.meta.env.BASE_URL.replace(/\/$/, '') || '/',
+})
 
 export default function App() {
   return <RouterProvider router={router} />

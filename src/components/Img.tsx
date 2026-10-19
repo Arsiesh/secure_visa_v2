@@ -1,5 +1,6 @@
 import type { CSSProperties, ImgHTMLAttributes } from 'react'
 import { imageMeta } from '../content/imageMeta'
+import { imageUrl } from '../lib/imageUrl'
 
 type ImgProps = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt' | 'width' | 'height'> & {
   /** Filename inside /images/, for example "about-image.webp". */
@@ -23,7 +24,7 @@ export function Img({ name, alt, className, priority = false, sizes, style, ...r
   return (
     <img
       {...rest}
-      src={`/images/${name}`}
+      src={imageUrl(name)}
       alt={alt}
       width={meta?.w}
       height={meta?.h}

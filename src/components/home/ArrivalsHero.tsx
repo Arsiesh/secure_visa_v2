@@ -9,6 +9,7 @@ import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 import { Img } from '../Img'
 import { SplitFlapCell } from './SplitFlapCell'
+import { imageUrl } from '../../lib/imageUrl'
 import './board.css'
 
 const ADVANCE_MS = 6000
@@ -117,7 +118,7 @@ export function ArrivalsHero() {
   useEffect(() => {
     const next = boardArrivals[(cur + 1) % rows.length]
     const img = new Image()
-    img.src = `/images/${next.image}`
+    img.src = imageUrl(next.image)
   }, [cur, rows.length])
 
   useEffect(() => {
